@@ -31,14 +31,32 @@ defmodule Exdcm.RS.QIDO do
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 
-  def series(studyInstenceUid) do
-    HTTPoison.get!("#{@base}/aets/#{@aet}/rs/studies/#{studyInstenceUid}/series").body
+  def series(studyInstanceUid) do
+    HTTPoison.get!("#{@base}/aets/#{@aet}/rs/studies/#{studyInstanceUid}/series").body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 
   def series() do
     HTTPoison.get!("#{@base}/aets/#{@aet}/rs/series").body
+    |> Poison.decode!
+    |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
+  end
+
+  def studyInstances(studyInstanceUid, seriesInstanceUid) do
+    HTTPoison.get!("#{@base}/aets/#{@aet}/rs/studies/#{studyInstanceUid}/series/#{seriesInstanceUid}/instances").body
+    |> Poison.decode!
+    |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
+  end
+
+  def studyInstances(studyInstanceUid) do
+    HTTPoison.get!("#{@base}/aets/#{@aet}/rs/studies/#{studyInstanceUid}/instances").body
+    |> Poison.decode!
+    |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
+  end
+
+  def instances() do
+    HTTPoison.get!("#{@base}/aets/#{@aet}/rs/instances").body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
