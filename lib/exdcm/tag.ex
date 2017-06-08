@@ -1,19 +1,25 @@
-# This file can be regenerated automatically with:
+# This file can be generated with:
 # $ grep "  # (" tag.ex | sed 's/  # //' > tags
 #
-# and executing the following elixir script
+# and executing the following elixir script:
 #
-#  IO.puts "defmodule Exdcm.Tag do"
-#  for line <- File.stream!("tags") do
-#    lf = String.split(Regex.replace(~r/'|\//, line, ""), " ")
-#    tag = Regex.scan(~r/[0-9A-F]{4}/, Enum.at(lf, 0)) |> List.flatten |> Enum.join("")
-#    fn_name = Macro.underscore(Enum.at(lf, 1))
-#    vr_types = Regex.scan(~r/[A-Z]{2}/, Enum.at(lf, 2)) |> List.flatten
-#
-#    IO.puts "\n  # #{line}  # VR values: #{inspect vr_types}\n  def name(\"#{tag}\"), do: :#{fn_name}"
-#  end
-#  IO.puts "end"
-#
+# File.stream!("gen.exs") |> Enum.each(&(if not Regex.match?(~r/^#|^IO.puts "#/, &1), do: IO.write "# #{&1}"))
+# IO.puts "defmodule Exdcm.Tag do"
+# for line <- File.stream!("tags") do
+#   line = Regex.replace(~r/µ/, line, "u")
+#   lf = String.split(Regex.replace(~r/[()']/, line, ""), " ")
+#   tag = Regex.scan(~r/[0-9A-F]{4}/, Enum.at(lf, 0)) |> List.flatten |> Enum.join("")
+#   fn_name = Regex.replace(~r/IDs/, Enum.at(lf, 1), "_ids")
+#   fn_name = Regex.replace(~r/[A-Z]+[0-9]*_/, fn_name, &String.downcase/1)
+#   fn_name = Regex.replace(~r/_{2,}|[\/&,-]/, Macro.underscore(fn_name), "_")
+#   fn_name = Regex.replace(~r/^[0-9]/, fn_name, "_")
+#   vr_types = Regex.scan(~r/[A-Z]{2}/, Enum.at(lf, 2)) |> List.flatten
+# 
+#   IO.write "\n  # #{line}"
+#   IO.puts "  # VR values: #{inspect vr_types}"
+#   IO.puts "  def name(\"#{tag}\"), do: :#{fn_name}"
+# end
+# IO.puts "end"
 defmodule Exdcm.Tag do
 
   # (0000,0000) CommandGroupLength dvUL
@@ -170,7 +176,7 @@ defmodule Exdcm.Tag do
 
   # (0000,5140) Normal/Reverse dvCS
   # VR values: ["CS"]
-  def name("00005140"), do: :normal_reverse
+  def name("00005140"), do: :normal__reverse
 
   # (0000,5150) AddGrayScale dvCS
   # VR values: ["CS"]
@@ -326,7 +332,7 @@ defmodule Exdcm.Tag do
 
   # (0004,1420) OffsetofReferencedLower_LevelDirectoryEntity dvUL
   # VR values: ["UL"]
-  def name("00041420"), do: :offsetof_referenced_lower__level_directory_entity
+  def name("00041420"), do: :offsetof_referenced_lower_level_directory_entity
 
   # (0004,1430) DirectoryRecordType dvCS
   # VR values: ["CS"]
@@ -410,7 +416,7 @@ defmodule Exdcm.Tag do
 
   # (0008,0015) InstanceCoercionDate/Time dvDT
   # VR values: ["DT"]
-  def name("00080015"), do: :instance_coercion_date_time
+  def name("00080015"), do: :instance_coercion_date__time
 
   # (0008,0016) SOPClassUID dvUI
   # VR values: ["UI"]
@@ -454,7 +460,7 @@ defmodule Exdcm.Tag do
 
   # (0008,002A) AcquisitionDate/Time dvDT
   # VR values: ["DT"]
-  def name("0008002A"), do: :acquisition_date_time
+  def name("0008002A"), do: :acquisition_date__time
 
   # (0008,0030) StudyTime dvTM
   # VR values: ["TM"]
@@ -502,11 +508,11 @@ defmodule Exdcm.Tag do
 
   # (0008,0052) Query/RetrieveLevel dvCS
   # VR values: ["CS"]
-  def name("00080052"), do: :query_retrieve_level
+  def name("00080052"), do: :query__retrieve_level
 
   # (0008,0053) Query/RetrieveView dvCS
   # VR values: ["CS"]
-  def name("00080053"), do: :query_retrieve_view
+  def name("00080053"), do: :query__retrieve_view
 
   # (0008,0054) RetrieveAETitle dvAE
   # VR values: ["AE"]
@@ -682,11 +688,11 @@ defmodule Exdcm.Tag do
 
   # (0008,1048) Physician(s)ofRecord dvPN
   # VR values: ["PN"]
-  def name("00081048"), do: :physician(s)of_record
+  def name("00081048"), do: :physiciansof_record
 
   # (0008,1049) Physician(s)ofRecordIdentificationSequence dvSQ
   # VR values: ["SQ"]
-  def name("00081049"), do: :physician(s)of_record_identification_sequence
+  def name("00081049"), do: :physiciansof_record_identification_sequence
 
   # (0008,1050) PerformingPhysician'sName dvPN
   # VR values: ["PN"]
@@ -698,11 +704,11 @@ defmodule Exdcm.Tag do
 
   # (0008,1060) NameofPhysician(s)ReadingStudy dvPN
   # VR values: ["PN"]
-  def name("00081060"), do: :nameof_physician(s)_reading_study
+  def name("00081060"), do: :nameof_physicians_reading_study
 
   # (0008,1062) Physician(s)ReadingStudyIdentificationSequence dvSQ
   # VR values: ["SQ"]
-  def name("00081062"), do: :physician(s)_reading_study_identification_sequence
+  def name("00081062"), do: :physicians_reading_study_identification_sequence
 
   # (0008,1070) Operators'Name dvPN
   # VR values: ["PN"]
@@ -854,7 +860,7 @@ defmodule Exdcm.Tag do
 
   # (0008,2110) LossyImageCompression(Retired) dvCS
   # VR values: ["CS"]
-  def name("00082110"), do: :lossy_image_compression(_retired)
+  def name("00082110"), do: :lossy_image_compression_retired
 
   # (0008,2111) DerivationDescription dvST
   # VR values: ["ST"]
@@ -894,11 +900,11 @@ defmodule Exdcm.Tag do
 
   # (0008,2130) EventElapsedTime(s) dvDS
   # VR values: ["DS"]
-  def name("00082130"), do: :event_elapsed_time(s)
+  def name("00082130"), do: :event_elapsed_times
 
   # (0008,2132) EventTimerName(s) dvLO
   # VR values: ["LO"]
-  def name("00082132"), do: :event_timer_name(s)
+  def name("00082132"), do: :event_timer_names
 
   # (0008,2133) EventTimerSequence dvSQ
   # VR values: ["SQ"]
@@ -950,7 +956,7 @@ defmodule Exdcm.Tag do
 
   # (0008,2229) AnatomicStructure,SpaceorRegionSequence dvSQ
   # VR values: ["SQ"]
-  def name("00082229"), do: :anatomic_structure,_spaceor_region_sequence
+  def name("00082229"), do: :anatomic_structure__spaceor_region_sequence
 
   # (0008,2230) PrimaryAnatomicStructureModifierSequence dvSQ
   # VR values: ["SQ"]
@@ -974,39 +980,39 @@ defmodule Exdcm.Tag do
 
   # (0008,2251) AnatomicStructureSpaceorRegionCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("00082251"), do: :anatomic_structure_spaceor_region_code_sequence(_trial)
+  def name("00082251"), do: :anatomic_structure_spaceor_region_code_sequence_trial
 
   # (0008,2253) AnatomicPortalofEntranceCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("00082253"), do: :anatomic_portalof_entrance_code_sequence(_trial)
+  def name("00082253"), do: :anatomic_portalof_entrance_code_sequence_trial
 
   # (0008,2255) AnatomicApproachDirectionCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("00082255"), do: :anatomic_approach_direction_code_sequence(_trial)
+  def name("00082255"), do: :anatomic_approach_direction_code_sequence_trial
 
   # (0008,2256) AnatomicPerspectiveDescription(Trial) dvST
   # VR values: ["ST"]
-  def name("00082256"), do: :anatomic_perspective_description(_trial)
+  def name("00082256"), do: :anatomic_perspective_description_trial
 
   # (0008,2257) AnatomicPerspectiveCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("00082257"), do: :anatomic_perspective_code_sequence(_trial)
+  def name("00082257"), do: :anatomic_perspective_code_sequence_trial
 
   # (0008,2258) AnatomicLocationofExaminingInstrumentDescription(Trial) dvST
   # VR values: ["ST"]
-  def name("00082258"), do: :anatomic_locationof_examining_instrument_description(_trial)
+  def name("00082258"), do: :anatomic_locationof_examining_instrument_description_trial
 
   # (0008,2259) AnatomicLocationofExaminingInstrumentCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("00082259"), do: :anatomic_locationof_examining_instrument_code_sequence(_trial)
+  def name("00082259"), do: :anatomic_locationof_examining_instrument_code_sequence_trial
 
   # (0008,225A) AnatomicStructureSpaceorRegionModifierCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0008225A"), do: :anatomic_structure_spaceor_region_modifier_code_sequence(_trial)
+  def name("0008225A"), do: :anatomic_structure_spaceor_region_modifier_code_sequence_trial
 
   # (0008,225C) OnAxisBackgroundAnatomicStructureCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0008225C"), do: :on_axis_background_anatomic_structure_code_sequence(_trial)
+  def name("0008225C"), do: :on_axis_background_anatomic_structure_code_sequence_trial
 
   # (0008,3001) AlternateRepresentationSequence dvSQ
   # VR values: ["SQ"]
@@ -1042,7 +1048,7 @@ defmodule Exdcm.Tag do
 
   # (0008,9123) Creator_VersionUID dvUI
   # VR values: ["UI"]
-  def name("00089123"), do: :creator__version_uid
+  def name("00089123"), do: :creator_version_uid
 
   # (0008,9124) DerivationImageSequence dvSQ
   # VR values: ["SQ"]
@@ -1470,7 +1476,7 @@ defmodule Exdcm.Tag do
 
   # (0010,1000) OtherPatientIDs dvLO
   # VR values: ["LO"]
-  def name("00101000"), do: :other_patient_i_ds
+  def name("00101000"), do: :other_patient_ids
 
   # (0010,1001) OtherPatientNames dvPN
   # VR values: ["PN"]
@@ -1478,7 +1484,7 @@ defmodule Exdcm.Tag do
 
   # (0010,1002) OtherPatientIDsSequence dvSQ
   # VR values: ["SQ"]
-  def name("00101002"), do: :other_patient_i_ds_sequence
+  def name("00101002"), do: :other_patient_ids_sequence
 
   # (0010,1005) Patient'sBirthName dvPN
   # VR values: ["PN"]
@@ -2098,7 +2104,7 @@ defmodule Exdcm.Tag do
 
   # (0014,0045) MaterialPropertiesFileFormat(Retired) dvST
   # VR values: ["ST"]
-  def name("00140045"), do: :material_properties_file_format(_retired)
+  def name("00140045"), do: :material_properties_file_format_retired
 
   # (0014,0046) MaterialNotes dvLT
   # VR values: ["LT"]
@@ -2350,11 +2356,11 @@ defmodule Exdcm.Tag do
 
   # (0014,400E) Pre_AmplifierEquipmentSequence dvSQ
   # VR values: ["SQ"]
-  def name("0014400E"), do: :pre__amplifier_equipment_sequence
+  def name("0014400E"), do: :pre_amplifier_equipment_sequence
 
   # (0014,400F) Pre_AmplifierNotes dvLT
   # VR values: ["LT"]
-  def name("0014400F"), do: :pre__amplifier_notes
+  def name("0014400F"), do: :pre_amplifier_notes
 
   # (0014,4010) TransmitTransducerSequence dvSQ
   # VR values: ["SQ"]
@@ -2474,7 +2480,7 @@ defmodule Exdcm.Tag do
 
   # (0014,4040) Pre_AmplifierSettingsSequence dvSQ
   # VR values: ["SQ"]
-  def name("00144040"), do: :pre__amplifier_settings_sequence
+  def name("00144040"), do: :pre_amplifier_settings_sequence
 
   # (0014,4050) TransmitTransducerSettingsSequence dvSQ
   # VR values: ["SQ"]
@@ -2682,19 +2688,19 @@ defmodule Exdcm.Tag do
 
   # (0018,0010) Contrast/BolusAgent dvLO
   # VR values: ["LO"]
-  def name("00180010"), do: :contrast_bolus_agent
+  def name("00180010"), do: :contrast__bolus_agent
 
   # (0018,0012) Contrast/BolusAgentSequence dvSQ
   # VR values: ["SQ"]
-  def name("00180012"), do: :contrast_bolus_agent_sequence
+  def name("00180012"), do: :contrast__bolus_agent_sequence
 
   # (0018,0013) Contrast/BolusT1Relaxivity dvFL
   # VR values: ["FL"]
-  def name("00180013"), do: :contrast_bolus_t1_relaxivity
+  def name("00180013"), do: :contrast__bolus_t1_relaxivity
 
   # (0018,0014) Contrast/BolusAdministrationRouteSequence dvSQ
   # VR values: ["SQ"]
-  def name("00180014"), do: :contrast_bolus_administration_route_sequence
+  def name("00180014"), do: :contrast__bolus_administration_route_sequence
 
   # (0018,0015) BodyPartExamined dvCS
   # VR values: ["CS"]
@@ -2854,7 +2860,7 @@ defmodule Exdcm.Tag do
 
   # (0018,0086) EchoNumber(s) dvIS
   # VR values: ["IS"]
-  def name("00180086"), do: :echo_number(s)
+  def name("00180086"), do: :echo_numbers
 
   # (0018,0087) MagneticFieldStrength dvDS
   # VR values: ["DS"]
@@ -2962,7 +2968,7 @@ defmodule Exdcm.Tag do
 
   # (0018,1020) SoftwareVersion(s) dvLO
   # VR values: ["LO"]
-  def name("00181020"), do: :software_version(s)
+  def name("00181020"), do: :software_versions
 
   # (0018,1022) VideoImageFormatAcquired dvSH
   # VR values: ["SH"]
@@ -2978,23 +2984,23 @@ defmodule Exdcm.Tag do
 
   # (0018,1040) Contrast/BolusRoute dvLO
   # VR values: ["LO"]
-  def name("00181040"), do: :contrast_bolus_route
+  def name("00181040"), do: :contrast__bolus_route
 
   # (0018,1041) Contrast/BolusVolume dvDS
   # VR values: ["DS"]
-  def name("00181041"), do: :contrast_bolus_volume
+  def name("00181041"), do: :contrast__bolus_volume
 
   # (0018,1042) Contrast/BolusStartTime dvTM
   # VR values: ["TM"]
-  def name("00181042"), do: :contrast_bolus_start_time
+  def name("00181042"), do: :contrast__bolus_start_time
 
   # (0018,1043) Contrast/BolusStopTime dvTM
   # VR values: ["TM"]
-  def name("00181043"), do: :contrast_bolus_stop_time
+  def name("00181043"), do: :contrast__bolus_stop_time
 
   # (0018,1044) Contrast/BolusTotalDose dvDS
   # VR values: ["DS"]
-  def name("00181044"), do: :contrast_bolus_total_dose
+  def name("00181044"), do: :contrast__bolus_total_dose
 
   # (0018,1045) SyringeCounts dvIS
   # VR values: ["IS"]
@@ -3010,11 +3016,11 @@ defmodule Exdcm.Tag do
 
   # (0018,1048) Contrast/BolusIngredient dvCS
   # VR values: ["CS"]
-  def name("00181048"), do: :contrast_bolus_ingredient
+  def name("00181048"), do: :contrast__bolus_ingredient
 
   # (0018,1049) Contrast/BolusIngredientConcentration dvDS
   # VR values: ["DS"]
-  def name("00181049"), do: :contrast_bolus_ingredient_concentration
+  def name("00181049"), do: :contrast__bolus_ingredient_concentration
 
   # (0018,1050) SpatialResolution dvDS
   # VR values: ["DS"]
@@ -3110,11 +3116,11 @@ defmodule Exdcm.Tag do
 
   # (0018,1078) RadiopharmaceuticalStartDate/Time dvDT
   # VR values: ["DT"]
-  def name("00181078"), do: :radiopharmaceutical_start_date_time
+  def name("00181078"), do: :radiopharmaceutical_start_date__time
 
   # (0018,1079) RadiopharmaceuticalStopDate/Time dvDT
   # VR values: ["DT"]
-  def name("00181079"), do: :radiopharmaceutical_stop_date_time
+  def name("00181079"), do: :radiopharmaceutical_stop_date__time
 
   # (0018,1080) BeatRejectionFlag dvCS
   # VR values: ["CS"]
@@ -3122,11 +3128,11 @@ defmodule Exdcm.Tag do
 
   # (0018,1081) LowR_RValue dvIS
   # VR values: ["IS"]
-  def name("00181081"), do: :low_r__r_value
+  def name("00181081"), do: :lowr_r_value
 
   # (0018,1082) HighR_RValue dvIS
   # VR values: ["IS"]
-  def name("00181082"), do: :high_r__r_value
+  def name("00181082"), do: :highr_r_value
 
   # (0018,1083) IntervalsAcquired dvIS
   # VR values: ["IS"]
@@ -3174,11 +3180,11 @@ defmodule Exdcm.Tag do
 
   # (0018,1120) Gantry/DetectorTilt dvDS
   # VR values: ["DS"]
-  def name("00181120"), do: :gantry_detector_tilt
+  def name("00181120"), do: :gantry__detector_tilt
 
   # (0018,1121) Gantry/DetectorSlew dvDS
   # VR values: ["DS"]
-  def name("00181121"), do: :gantry_detector_slew
+  def name("00181121"), do: :gantry__detector_slew
 
   # (0018,1130) TableHeight dvDS
   # VR values: ["DS"]
@@ -3246,7 +3252,7 @@ defmodule Exdcm.Tag do
 
   # (0018,1149) FieldofViewDimension(s) dvIS
   # VR values: ["IS"]
-  def name("00181149"), do: :fieldof_view_dimension(s)
+  def name("00181149"), do: :fieldof_view_dimensions
 
   # (0018,1150) ExposureTime dvIS
   # VR values: ["IS"]
@@ -3254,15 +3260,15 @@ defmodule Exdcm.Tag do
 
   # (0018,1151) X_RayTubeCurrent dvIS
   # VR values: ["IS"]
-  def name("00181151"), do: :x__ray_tube_current
+  def name("00181151"), do: :x_ray_tube_current
 
   # (0018,1152) Exposure dvIS
   # VR values: ["IS"]
   def name("00181152"), do: :exposure
 
-  # (0018,1153) ExposureinµAs dvIS
+  # (0018,1153) ExposureinuAs dvIS
   # VR values: ["IS"]
-  def name("00181153"), do: :exposureinµ_as
+  def name("00181153"), do: :exposureinu_as
 
   # (0018,1154) AveragePulseWidth dvDS
   # VR values: ["DS"]
@@ -3310,7 +3316,7 @@ defmodule Exdcm.Tag do
 
   # (0018,1180) Collimator/gridName dvSH
   # VR values: ["SH"]
-  def name("00181180"), do: :collimatorgrid_name
+  def name("00181180"), do: :collimator_grid_name
 
   # (0018,1181) CollimatorType dvCS
   # VR values: ["CS"]
@@ -3330,7 +3336,7 @@ defmodule Exdcm.Tag do
 
   # (0018,1190) FocalSpot(s) dvDS
   # VR values: ["DS"]
-  def name("00181190"), do: :focal_spot(s)
+  def name("00181190"), do: :focal_spots
 
   # (0018,1191) AnodeTargetMaterial dvCS
   # VR values: ["CS"]
@@ -3358,7 +3364,7 @@ defmodule Exdcm.Tag do
 
   # (0018,1202) Date/TimeofLastCalibration dvDT
   # VR values: ["DT"]
-  def name("00181202"), do: :date_timeof_last_calibration
+  def name("00181202"), do: :date__timeof_last_calibration
 
   # (0018,1210) ConvolutionKernel dvSH
   # VR values: ["SH"]
@@ -3366,7 +3372,7 @@ defmodule Exdcm.Tag do
 
   # (0018,1240) Upper/LowerPixelValues dvIS
   # VR values: ["IS"]
-  def name("00181240"), do: :upper_lower_pixel_values
+  def name("00181240"), do: :upper__lower_pixel_values
 
   # (0018,1242) ActualFrameDuration dvIS
   # VR values: ["IS"]
@@ -3430,7 +3436,7 @@ defmodule Exdcm.Tag do
 
   # (0018,1318) dB/dt dvDS
   # VR values: ["DS"]
-  def name("00181318"), do: :d_bdt
+  def name("00181318"), do: :d_b_dt
 
   # (0018,1400) AcquisitionDeviceProcessingDescription dvLO
   # VR values: ["LO"]
@@ -3454,7 +3460,7 @@ defmodule Exdcm.Tag do
 
   # (0018,1405) RelativeX_RayExposure dvIS
   # VR values: ["IS"]
-  def name("00181405"), do: :relative_x__ray_exposure
+  def name("00181405"), do: :relativex_ray_exposure
 
   # (0018,1411) ExposureIndex dvDS
   # VR values: ["DS"]
@@ -3874,7 +3880,7 @@ defmodule Exdcm.Tag do
 
   # (0018,6038) DopplerSampleVolumeXPosition(Retired) dvUL
   # VR values: ["UL"]
-  def name("00186038"), do: :doppler_sample_volume_x_position(_retired)
+  def name("00186038"), do: :doppler_sample_volume_x_position_retired
 
   # (0018,6039) DopplerSampleVolumeXPosition dvSL
   # VR values: ["SL"]
@@ -3882,7 +3888,7 @@ defmodule Exdcm.Tag do
 
   # (0018,603A) DopplerSampleVolumeYPosition(Retired) dvUL
   # VR values: ["UL"]
-  def name("0018603A"), do: :doppler_sample_volume_y_position(_retired)
+  def name("0018603A"), do: :doppler_sample_volume_y_position_retired
 
   # (0018,603B) DopplerSampleVolumeYPosition dvSL
   # VR values: ["SL"]
@@ -3890,35 +3896,35 @@ defmodule Exdcm.Tag do
 
   # (0018,603C) TM_LinePositionX0(Retired) dvUL
   # VR values: ["UL"]
-  def name("0018603C"), do: :t_m__line_position_x0(_retired)
+  def name("0018603C"), do: :tm_line_position_x0_retired
 
   # (0018,603D) TM_LinePositionX0 dvSL
   # VR values: ["SL"]
-  def name("0018603D"), do: :t_m__line_position_x0
+  def name("0018603D"), do: :tm_line_position_x0
 
   # (0018,603E) TM_LinePositionY0(Retired) dvUL
   # VR values: ["UL"]
-  def name("0018603E"), do: :t_m__line_position_y0(_retired)
+  def name("0018603E"), do: :tm_line_position_y0_retired
 
   # (0018,603F) TM_LinePositionY0 dvSL
   # VR values: ["SL"]
-  def name("0018603F"), do: :t_m__line_position_y0
+  def name("0018603F"), do: :tm_line_position_y0
 
   # (0018,6040) TM_LinePositionX1(Retired) dvUL
   # VR values: ["UL"]
-  def name("00186040"), do: :t_m__line_position_x1(_retired)
+  def name("00186040"), do: :tm_line_position_x1_retired
 
   # (0018,6041) TM_LinePositionX1 dvSL
   # VR values: ["SL"]
-  def name("00186041"), do: :t_m__line_position_x1
+  def name("00186041"), do: :tm_line_position_x1
 
   # (0018,6042) TM_LinePositionY1(Retired) dvUL
   # VR values: ["UL"]
-  def name("00186042"), do: :t_m__line_position_y1(_retired)
+  def name("00186042"), do: :tm_line_position_y1_retired
 
   # (0018,6043) TM_LinePositionY1 dvSL
   # VR values: ["SL"]
-  def name("00186043"), do: :t_m__line_position_y1
+  def name("00186043"), do: :tm_line_position_y1
 
   # (0018,6044) PixelComponentOrganization dvUS
   # VR values: ["US"]
@@ -4046,7 +4052,7 @@ defmodule Exdcm.Tag do
 
   # (0018,7026) DetectorActiveDimension(s) dvDS
   # VR values: ["DS"]
-  def name("00187026"), do: :detector_active_dimension(s)
+  def name("00187026"), do: :detector_active_dimensions
 
   # (0018,7028) DetectorActiveOrigin dvDS
   # VR values: ["DS"]
@@ -4144,13 +4150,13 @@ defmodule Exdcm.Tag do
   # VR values: ["DS"]
   def name("00187065"), do: :phototimer_setting
 
-  # (0018,8150) ExposureTimeinµS dvDS
+  # (0018,8150) ExposureTimeinuS dvDS
   # VR values: ["DS"]
-  def name("00188150"), do: :exposure_timeinµ_s
+  def name("00188150"), do: :exposure_timeinu_s
 
-  # (0018,8151) X_RayTubeCurrentinµA dvDS
+  # (0018,8151) X_RayTubeCurrentinuA dvDS
   # VR values: ["DS"]
-  def name("00188151"), do: :x__ray_tube_currentinµ_a
+  def name("00188151"), do: :x_ray_tube_currentinu_a
 
   # (0018,9004) ContentQualification dvCS
   # VR values: ["CS"]
@@ -4250,11 +4256,11 @@ defmodule Exdcm.Tag do
 
   # (0018,9032) Geometryofk_SpaceTraversal dvCS
   # VR values: ["CS"]
-  def name("00189032"), do: :geometryofk__space_traversal
+  def name("00189032"), do: :geometryofk_space_traversal
 
   # (0018,9033) Segmentedk_SpaceTraversal dvCS
   # VR values: ["CS"]
-  def name("00189033"), do: :segmentedk__space_traversal
+  def name("00189033"), do: :segmentedk_space_traversal
 
   # (0018,9034) RectilinearPhaseEncodeReordering dvCS
   # VR values: ["CS"]
@@ -4290,19 +4296,19 @@ defmodule Exdcm.Tag do
 
   # (0018,9045) Multi_CoilDefinitionSequence dvSQ
   # VR values: ["SQ"]
-  def name("00189045"), do: :multi__coil_definition_sequence
+  def name("00189045"), do: :multi_coil_definition_sequence
 
   # (0018,9046) Multi_CoilConfiguration dvLO
   # VR values: ["LO"]
-  def name("00189046"), do: :multi__coil_configuration
+  def name("00189046"), do: :multi_coil_configuration
 
   # (0018,9047) Multi_CoilElementName dvSH
   # VR values: ["SH"]
-  def name("00189047"), do: :multi__coil_element_name
+  def name("00189047"), do: :multi_coil_element_name
 
   # (0018,9048) Multi_CoilElementUsed dvCS
   # VR values: ["CS"]
-  def name("00189048"), do: :multi__coil_element_used
+  def name("00189048"), do: :multi_coil_element_used
 
   # (0018,9049) MRTransmitCoilSequence dvSQ
   # VR values: ["SQ"]
@@ -4334,7 +4340,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9059) De-coupling dvCS
   # VR values: ["CS"]
-  def name("00189059"), do: :de-coupling
+  def name("00189059"), do: :de_coupling
 
   # (0018,9060) De_coupledNucleus dvCS
   # VR values: ["CS"]
@@ -4374,7 +4380,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9070) CardiacR_RIntervalSpecified dvFD
   # VR values: ["FD"]
-  def name("00189070"), do: :cardiac_r__r_interval_specified
+  def name("00189070"), do: :cardiacr_r_interval_specified
 
   # (0018,9073) AcquisitionDuration dvFD
   # VR values: ["FD"]
@@ -4382,7 +4388,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9074) FrameAcquisitionDate/Time dvDT
   # VR values: ["DT"]
-  def name("00189074"), do: :frame_acquisition_date_time
+  def name("00189074"), do: :frame_acquisition_date__time
 
   # (0018,9075) DiffusionDirectionality dvCS
   # VR values: ["CS"]
@@ -4450,11 +4456,11 @@ defmodule Exdcm.Tag do
 
   # (0018,9093) Numberofk_SpaceTrajectories dvUS
   # VR values: ["US"]
-  def name("00189093"), do: :numberofk__space_trajectories
+  def name("00189093"), do: :numberofk_space_trajectories
 
   # (0018,9094) Coverageofk_Space dvCS
   # VR values: ["CS"]
-  def name("00189094"), do: :coverageofk__space
+  def name("00189094"), do: :coverageofk_space
 
   # (0018,9095) SpectroscopyAcquisitionPhaseRows dvUL
   # VR values: ["UL"]
@@ -4462,7 +4468,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9096) ParallelReductionFactorIn_plane(Retired) dvFD
   # VR values: ["FD"]
-  def name("00189096"), do: :parallel_reduction_factor_in_plane(_retired)
+  def name("00189096"), do: :parallel_reduction_factor_in_plane_retired
 
   # (0018,9098) TransmitterFrequency dvFD
   # VR values: ["FD"]
@@ -4478,7 +4484,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9103) MRSpectroscopyFOV/GeometrySequence dvSQ
   # VR values: ["SQ"]
-  def name("00189103"), do: :mr_spectroscopy_fov_geometry_sequence
+  def name("00189103"), do: :mr_spectroscopy_fo_v__geometry_sequence
 
   # (0018,9104) SlabThickness dvFD
   # VR values: ["FD"]
@@ -4522,7 +4528,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9125) MRFOV/GeometrySequence dvSQ
   # VR values: ["SQ"]
-  def name("00189125"), do: :mrfov_geometry_sequence
+  def name("00189125"), do: :mrfo_v__geometry_sequence
 
   # (0018,9126) VolumeLocalizationSequence dvSQ
   # VR values: ["SQ"]
@@ -4538,7 +4544,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9151) FrameReferenceDate/Time dvDT
   # VR values: ["DT"]
-  def name("00189151"), do: :frame_reference_date_time
+  def name("00189151"), do: :frame_reference_date__time
 
   # (0018,9152) MRMetaboliteMapSequence dvSQ
   # VR values: ["SQ"]
@@ -4846,7 +4852,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9313) DataCollectionCenter(Patient) dvFD
   # VR values: ["FD"]
-  def name("00189313"), do: :data_collection_center(_patient)
+  def name("00189313"), do: :data_collection_center_patient
 
   # (0018,9314) CTReconstructionSequence dvSQ
   # VR values: ["SQ"]
@@ -4866,7 +4872,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9318) ReconstructionTargetCenter(Patient) dvFD
   # VR values: ["FD"]
-  def name("00189318"), do: :reconstruction_target_center(_patient)
+  def name("00189318"), do: :reconstruction_target_center_patient
 
   # (0018,9319) ReconstructionAngle dvFD
   # VR values: ["FD"]
@@ -4894,7 +4900,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9325) CTX_RayDetailsSequence dvSQ
   # VR values: ["SQ"]
-  def name("00189325"), do: :ct_x__ray_details_sequence
+  def name("00189325"), do: :ctx_ray_details_sequence
 
   # (0018,9326) CTPositionSequence dvSQ
   # VR values: ["SQ"]
@@ -4914,7 +4920,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9330) X_RayTubeCurrentinmA dvFD
   # VR values: ["FD"]
-  def name("00189330"), do: :x__ray_tube_currentinm_a
+  def name("00189330"), do: :x_ray_tube_currentinm_a
 
   # (0018,9332) ExposureinmAs dvFD
   # VR values: ["FD"]
@@ -4934,11 +4940,11 @@ defmodule Exdcm.Tag do
 
   # (0018,9337) Contrast/BolusAgentNumber dvUS
   # VR values: ["US"]
-  def name("00189337"), do: :contrast_bolus_agent_number
+  def name("00189337"), do: :contrast__bolus_agent_number
 
   # (0018,9338) Contrast/BolusIngredientCodeSequence dvSQ
   # VR values: ["SQ"]
-  def name("00189338"), do: :contrast_bolus_ingredient_code_sequence
+  def name("00189338"), do: :contrast__bolus_ingredient_code_sequence
 
   # (0018,9340) ContrastAdministrationProfileSequence dvSQ
   # VR values: ["SQ"]
@@ -4946,19 +4952,19 @@ defmodule Exdcm.Tag do
 
   # (0018,9341) Contrast/BolusUsageSequence dvSQ
   # VR values: ["SQ"]
-  def name("00189341"), do: :contrast_bolus_usage_sequence
+  def name("00189341"), do: :contrast__bolus_usage_sequence
 
   # (0018,9342) Contrast/BolusAgentAdministered dvCS
   # VR values: ["CS"]
-  def name("00189342"), do: :contrast_bolus_agent_administered
+  def name("00189342"), do: :contrast__bolus_agent_administered
 
   # (0018,9343) Contrast/BolusAgentDetected dvCS
   # VR values: ["CS"]
-  def name("00189343"), do: :contrast_bolus_agent_detected
+  def name("00189343"), do: :contrast__bolus_agent_detected
 
   # (0018,9344) Contrast/BolusAgentPhase dvCS
   # VR values: ["CS"]
-  def name("00189344"), do: :contrast_bolus_agent_phase
+  def name("00189344"), do: :contrast__bolus_agent_phase
 
   # (0018,9345) CTDIvol dvFD
   # VR values: ["FD"]
@@ -4982,7 +4988,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9360) CTAdditionalX_RaySourceSequence dvSQ
   # VR values: ["SQ"]
-  def name("00189360"), do: :ct_additional_x__ray_source_sequence
+  def name("00189360"), do: :ct_additionalx_ray_source_sequence
 
   # (0018,9401) ProjectionPixelCalibrationSequence dvSQ
   # VR values: ["SQ"]
@@ -5018,7 +5024,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9412) XA/XRFFrameCharacteristicsSequence dvSQ
   # VR values: ["SQ"]
-  def name("00189412"), do: :xaxrf_frame_characteristics_sequence
+  def name("00189412"), do: :x_a__xrf_frame_characteristics_sequence
 
   # (0018,9417) FrameAcquisitionSequence dvSQ
   # VR values: ["SQ"]
@@ -5026,7 +5032,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9420) X_RayReceptorType dvCS
   # VR values: ["CS"]
-  def name("00189420"), do: :x__ray_receptor_type
+  def name("00189420"), do: :x_ray_receptor_type
 
   # (0018,9423) AcquisitionProtocolName dvLO
   # VR values: ["LO"]
@@ -5038,7 +5044,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9425) Contrast/BolusIngredientOpaque dvCS
   # VR values: ["CS"]
-  def name("00189425"), do: :contrast_bolus_ingredient_opaque
+  def name("00189425"), do: :contrast__bolus_ingredient_opaque
 
   # (0018,9426) DistanceReceptorPlanetoDetectorHousing dvFL
   # VR values: ["FL"]
@@ -5050,7 +5056,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9428) IntensifierActiveDimension(s) dvFL
   # VR values: ["FL"]
-  def name("00189428"), do: :intensifier_active_dimension(s)
+  def name("00189428"), do: :intensifier_active_dimensions
 
   # (0018,9429) PhysicalDetectorSize dvFL
   # VR values: ["FL"]
@@ -5110,7 +5116,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9447) ColumnAngulation(Patient) dvFL
   # VR values: ["FL"]
-  def name("00189447"), do: :column_angulation(_patient)
+  def name("00189447"), do: :column_angulation_patient
 
   # (0018,9449) BeamAngle dvFL
   # VR values: ["FL"]
@@ -5138,7 +5144,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9461) FieldofViewDimension(s)inFloat dvFL
   # VR values: ["FL"]
-  def name("00189461"), do: :fieldof_view_dimension(s)in_float
+  def name("00189461"), do: :fieldof_view_dimensionsin_float
 
   # (0018,9462) IsocenterReferenceSystemSequence dvSQ
   # VR values: ["SQ"]
@@ -5194,7 +5200,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9476) X_RayGeometrySequence dvSQ
   # VR values: ["SQ"]
-  def name("00189476"), do: :x__ray_geometry_sequence
+  def name("00189476"), do: :x_ray_geometry_sequence
 
   # (0018,9477) IrradiationEventIdentificationSequence dvSQ
   # VR values: ["SQ"]
@@ -5202,7 +5208,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9504) X_Ray3DFrameTypeSequence dvSQ
   # VR values: ["SQ"]
-  def name("00189504"), do: :x__ray3_d_frame_type_sequence
+  def name("00189504"), do: :x_ray3_d_frame_type_sequence
 
   # (0018,9506) ContributingSourcesSequence dvSQ
   # VR values: ["SQ"]
@@ -5210,7 +5216,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9507) X_Ray3DAcquisitionSequence dvSQ
   # VR values: ["SQ"]
-  def name("00189507"), do: :x__ray3_d_acquisition_sequence
+  def name("00189507"), do: :x_ray3_d_acquisition_sequence
 
   # (0018,9508) PrimaryPositionerScanArc dvFL
   # VR values: ["FL"]
@@ -5238,11 +5244,11 @@ defmodule Exdcm.Tag do
 
   # (0018,9516) StartAcquisitionDate/Time dvDT
   # VR values: ["DT"]
-  def name("00189516"), do: :start_acquisition_date_time
+  def name("00189516"), do: :start_acquisition_date__time
 
   # (0018,9517) EndAcquisitionDate/Time dvDT
   # VR values: ["DT"]
-  def name("00189517"), do: :end_acquisition_date_time
+  def name("00189517"), do: :end_acquisition_date__time
 
   # (0018,9518) PrimaryPositionerIncrementSign dvSS
   # VR values: ["SS"]
@@ -5274,7 +5280,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9530) X_Ray3DReconstructionSequence dvSQ
   # VR values: ["SQ"]
-  def name("00189530"), do: :x__ray3_d_reconstruction_sequence
+  def name("00189530"), do: :x_ray3_d_reconstruction_sequence
 
   # (0018,9531) ReconstructionDescription dvLO
   # VR values: ["LO"]
@@ -5290,15 +5296,15 @@ defmodule Exdcm.Tag do
 
   # (0018,9542) X_RayAcquisitionDoseSequence dvSQ
   # VR values: ["SQ"]
-  def name("00189542"), do: :x__ray_acquisition_dose_sequence
+  def name("00189542"), do: :x_ray_acquisition_dose_sequence
 
   # (0018,9543) X_RaySourceIsocenterPrimaryAngle dvFD
   # VR values: ["FD"]
-  def name("00189543"), do: :x__ray_source_isocenter_primary_angle
+  def name("00189543"), do: :x_ray_source_isocenter_primary_angle
 
   # (0018,9544) X_RaySourceIsocenterSecondaryAngle dvFD
   # VR values: ["FD"]
-  def name("00189544"), do: :x__ray_source_isocenter_secondary_angle
+  def name("00189544"), do: :x_ray_source_isocenter_secondary_angle
 
   # (0018,9545) BreastSupportIsocenterPrimaryAngle dvFD
   # VR values: ["FD"]
@@ -5342,11 +5348,11 @@ defmodule Exdcm.Tag do
 
   # (0018,9555) X_RayGridSequence dvSQ
   # VR values: ["SQ"]
-  def name("00189555"), do: :x__ray_grid_sequence
+  def name("00189555"), do: :x_ray_grid_sequence
 
   # (0018,9556) X_RayFilterSequence dvSQ
   # VR values: ["SQ"]
-  def name("00189556"), do: :x__ray_filter_sequence
+  def name("00189556"), do: :x_ray_filter_sequence
 
   # (0018,9557) DetectorActiveAreaTLHCPosition dvFD
   # VR values: ["FD"]
@@ -5390,7 +5396,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9701) DecayCorrectionDate/Time dvDT
   # VR values: ["DT"]
-  def name("00189701"), do: :decay_correction_date_time
+  def name("00189701"), do: :decay_correction_date__time
 
   # (0018,9715) StartDensityThreshold dvFD
   # VR values: ["FD"]
@@ -5562,7 +5568,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9801) Depth(s)ofFocus dvFD
   # VR values: ["FD"]
-  def name("00189801"), do: :depth(s)of_focus
+  def name("00189801"), do: :depthsof_focus
 
   # (0018,9803) ExcludedIntervalsSequence dvSQ
   # VR values: ["SQ"]
@@ -5570,7 +5576,7 @@ defmodule Exdcm.Tag do
 
   # (0018,9804) ExclusionStartDate/Time dvDT
   # VR values: ["DT"]
-  def name("00189804"), do: :exclusion_start_date_time
+  def name("00189804"), do: :exclusion_start_date__time
 
   # (0018,9805) ExclusionDuration dvFD
   # VR values: ["FD"]
@@ -5622,7 +5628,7 @@ defmodule Exdcm.Tag do
 
   # (0018,A002) ContributionDate/Time dvDT
   # VR values: ["DT"]
-  def name("0018A002"), do: :contribution_date_time
+  def name("0018A002"), do: :contribution_date__time
 
   # (0018,A003) ContributionDescription dvST
   # VR values: ["ST"]
@@ -6618,7 +6624,7 @@ defmodule Exdcm.Tag do
 
   # (0020,0032) ImagePosition(Patient) dvDS
   # VR values: ["DS"]
-  def name("00200032"), do: :image_position(_patient)
+  def name("00200032"), do: :image_position_patient
 
   # (0020,0035) ImageOrientation dvDS
   # VR values: ["DS"]
@@ -6626,7 +6632,7 @@ defmodule Exdcm.Tag do
 
   # (0020,0037) ImageOrientation(Patient) dvDS
   # VR values: ["DS"]
-  def name("00200037"), do: :image_orientation(_patient)
+  def name("00200037"), do: :image_orientation_patient
 
   # (0020,0050) Location dvDS
   # VR values: ["DS"]
@@ -6742,7 +6748,7 @@ defmodule Exdcm.Tag do
 
   # (0020,3100) SourceImageIDs dvCS
   # VR values: ["CS"]
-  def name("00203100"), do: :source_image_i_ds
+  def name("00203100"), do: :source_image_ids
 
   # (0020,3401) ModifyingDeviceID dvCS
   # VR values: ["CS"]
@@ -6786,7 +6792,7 @@ defmodule Exdcm.Tag do
 
   # (0020,9057) In_StackPositionNumber dvUL
   # VR values: ["UL"]
-  def name("00209057"), do: :in__stack_position_number
+  def name("00209057"), do: :in_stack_position_number
 
   # (0020,9071) FrameAnatomySequence dvSQ
   # VR values: ["SQ"]
@@ -6822,11 +6828,11 @@ defmodule Exdcm.Tag do
 
   # (0020,9154) NominalCardiacTriggerTimePriortoR_Peak dvFL
   # VR values: ["FL"]
-  def name("00209154"), do: :nominal_cardiac_trigger_time_priorto_r__peak
+  def name("00209154"), do: :nominal_cardiac_trigger_time_priortor_peak
 
   # (0020,9155) ActualCardiacTriggerTimePriortoR_Peak dvFL
   # VR values: ["FL"]
-  def name("00209155"), do: :actual_cardiac_trigger_time_priorto_r__peak
+  def name("00209155"), do: :actual_cardiac_trigger_time_priortor_peak
 
   # (0020,9156) FrameAcquisitionNumber dvUS
   # VR values: ["US"]
@@ -6870,7 +6876,7 @@ defmodule Exdcm.Tag do
 
   # (0020,9171) UnassignedPer_FrameConvertedAttributesSequence dvSQ
   # VR values: ["SQ"]
-  def name("00209171"), do: :unassigned_per__frame_converted_attributes_sequence
+  def name("00209171"), do: :unassigned_per_frame_converted_attributes_sequence
 
   # (0020,9172) ConversionSourceAttributesSequence dvSQ
   # VR values: ["SQ"]
@@ -6926,7 +6932,7 @@ defmodule Exdcm.Tag do
 
   # (0020,9251) R_RIntervalTimeNominal dvFD
   # VR values: ["FD"]
-  def name("00209251"), do: :r__r_interval_time_nominal
+  def name("00209251"), do: :r_r_interval_time_nominal
 
   # (0020,9252) ActualCardiacTriggerDelayTime dvFD
   # VR values: ["FD"]
@@ -6954,11 +6960,11 @@ defmodule Exdcm.Tag do
 
   # (0020,9301) ImagePosition(Volume) dvFD
   # VR values: ["FD"]
-  def name("00209301"), do: :image_position(_volume)
+  def name("00209301"), do: :image_position_volume
 
   # (0020,9302) ImageOrientation(Volume) dvFD
   # VR values: ["FD"]
-  def name("00209302"), do: :image_orientation(_volume)
+  def name("00209302"), do: :image_orientation_volume
 
   # (0020,9307) UltrasoundAcquisitionGeometry dvCS
   # VR values: ["CS"]
@@ -6990,11 +6996,11 @@ defmodule Exdcm.Tag do
 
   # (0020,930E) PlanePosition(Volume)Sequence dvSQ
   # VR values: ["SQ"]
-  def name("0020930E"), do: :plane_position(_volume)_sequence
+  def name("0020930E"), do: :plane_position_volume_sequence
 
   # (0020,930F) PlaneOrientation(Volume)Sequence dvSQ
   # VR values: ["SQ"]
-  def name("0020930F"), do: :plane_orientation(_volume)_sequence
+  def name("0020930F"), do: :plane_orientation_volume_sequence
 
   # (0020,9310) TemporalPositionSequence dvSQ
   # VR values: ["SQ"]
@@ -7434,7 +7440,7 @@ defmodule Exdcm.Tag do
 
   # (0022,0001) LightPathFilterPass_ThroughWavelength dvUS
   # VR values: ["US"]
-  def name("00220001"), do: :light_path_filter_pass__through_wavelength
+  def name("00220001"), do: :light_path_filter_pass_through_wavelength
 
   # (0022,0002) LightPathFilterPassBand dvUS
   # VR values: ["US"]
@@ -7442,7 +7448,7 @@ defmodule Exdcm.Tag do
 
   # (0022,0003) ImagePathFilterPass_ThroughWavelength dvUS
   # VR values: ["US"]
-  def name("00220003"), do: :image_path_filter_pass__through_wavelength
+  def name("00220003"), do: :image_path_filter_pass_through_wavelength
 
   # (0022,0004) ImagePathFilterPassBand dvUS
   # VR values: ["US"]
@@ -8266,11 +8272,11 @@ defmodule Exdcm.Tag do
 
   # (0024,0090) VisualFieldTestPointX_Coordinate dvFL
   # VR values: ["FL"]
-  def name("00240090"), do: :visual_field_test_point_x__coordinate
+  def name("00240090"), do: :visual_field_test_pointx_coordinate
 
   # (0024,0091) VisualFieldTestPointY_Coordinate dvFL
   # VR values: ["FL"]
-  def name("00240091"), do: :visual_field_test_point_y__coordinate
+  def name("00240091"), do: :visual_field_test_pointy_coordinate
 
   # (0024,0092) AgeCorrectedSensitivityDeviationValue dvFL
   # VR values: ["FL"]
@@ -8326,11 +8332,11 @@ defmodule Exdcm.Tag do
 
   # (0024,0107) BlindSpotX_Coordinate dvFL
   # VR values: ["FL"]
-  def name("00240107"), do: :blind_spot_x__coordinate
+  def name("00240107"), do: :blind_spotx_coordinate
 
   # (0024,0108) BlindSpotY_Coordinate dvFL
   # VR values: ["FL"]
-  def name("00240108"), do: :blind_spot_y__coordinate
+  def name("00240108"), do: :blind_spoty_coordinate
 
   # (0024,0110) VisualAcuityMeasurementSequence dvSQ
   # VR values: ["SQ"]
@@ -9002,7 +9008,7 @@ defmodule Exdcm.Tag do
 
   # (0028,1055) WindowCenter&WidthExplanation dvLO
   # VR values: ["LO"]
-  def name("00281055"), do: :window_center&_width_explanation
+  def name("00281055"), do: :window_center__width_explanation
 
   # (0028,1056) VOILUTFunction dvCS
   # VR values: ["CS"]
@@ -9226,7 +9232,7 @@ defmodule Exdcm.Tag do
 
   # (0028,5000) Bi_PlaneAcquisitionSequence dvSQ
   # VR values: ["SQ"]
-  def name("00285000"), do: :bi__plane_acquisition_sequence
+  def name("00285000"), do: :bi_plane_acquisition_sequence
 
   # (0028,6010) RepresentativeFrameNumber dvUS
   # VR values: ["US"]
@@ -9234,7 +9240,7 @@ defmodule Exdcm.Tag do
 
   # (0028,6020) FrameNumbersofInterest(FOI) dvUS
   # VR values: ["US"]
-  def name("00286020"), do: :frame_numbersof_interest(_fo_i)
+  def name("00286020"), do: :frame_numbersof_interest_foi
 
   # (0028,6022) FrameofInterestDescription dvLO
   # VR values: ["LO"]
@@ -9246,7 +9252,7 @@ defmodule Exdcm.Tag do
 
   # (0028,6030) MaskPointer(s) dvUS
   # VR values: ["US"]
-  def name("00286030"), do: :mask_pointer(s)
+  def name("00286030"), do: :mask_pointers
 
   # (0028,6040) RWavePointer dvUS
   # VR values: ["US"]
@@ -10470,7 +10476,7 @@ defmodule Exdcm.Tag do
 
   # (0040,0012) Pre-Medication dvLO
   # VR values: ["LO"]
-  def name("00400012"), do: :pre-_medication
+  def name("00400012"), do: :pre__medication
 
   # (0040,0020) ScheduledProcedureStepStatus dvCS
   # VR values: ["CS"]
@@ -10518,7 +10524,7 @@ defmodule Exdcm.Tag do
 
   # (0040,0220) ReferencedNon_ImageCompositeSOPInstanceSequence dvSQ
   # VR values: ["SQ"]
-  def name("00400220"), do: :referenced_non__image_composite_sop_instance_sequence
+  def name("00400220"), do: :referenced_non_image_composite_sop_instance_sequence
 
   # (0040,0241) PerformedStationAETitle dvAE
   # VR values: ["AE"]
@@ -10638,7 +10644,7 @@ defmodule Exdcm.Tag do
 
   # (0040,0312) X_RayOutput dvDS
   # VR values: ["DS"]
-  def name("00400312"), do: :x__ray_output
+  def name("00400312"), do: :x_ray_output
 
   # (0040,0314) HalfValueLayer dvDS
   # VR values: ["DS"]
@@ -10726,11 +10732,11 @@ defmodule Exdcm.Tag do
 
   # (0040,0552) SpecimenDescriptionSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("00400552"), do: :specimen_description_sequence(_trial)
+  def name("00400552"), do: :specimen_description_sequence_trial
 
   # (0040,0553) SpecimenDescription(Trial) dvST
   # VR values: ["ST"]
-  def name("00400553"), do: :specimen_description(_trial)
+  def name("00400553"), do: :specimen_description_trial
 
   # (0040,0554) SpecimenUID dvUI
   # VR values: ["UI"]
@@ -10810,7 +10816,7 @@ defmodule Exdcm.Tag do
 
   # (0040,09F8) VitalStainCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("004009F8"), do: :vital_stain_code_sequence(_trial)
+  def name("004009F8"), do: :vital_stain_code_sequence_trial
 
   # (0040,1001) RequestedProcedureID dvSH
   # VR values: ["SH"]
@@ -10834,11 +10840,11 @@ defmodule Exdcm.Tag do
 
   # (0040,1006) PlacerOrderNumber/Procedure dvSH
   # VR values: ["SH"]
-  def name("00401006"), do: :placer_order_number_procedure
+  def name("00401006"), do: :placer_order_number__procedure
 
   # (0040,1007) FillerOrderNumber/Procedure dvSH
   # VR values: ["SH"]
-  def name("00401007"), do: :filler_order_number_procedure
+  def name("00401007"), do: :filler_order_number__procedure
 
   # (0040,1008) ConfidentialityCode dvLO
   # VR values: ["LO"]
@@ -10866,7 +10872,7 @@ defmodule Exdcm.Tag do
 
   # (0040,1060) RequestedProcedureDescription(Trial) dvLO
   # VR values: ["LO"]
-  def name("00401060"), do: :requested_procedure_description(_trial)
+  def name("00401060"), do: :requested_procedure_description_trial
 
   # (0040,1101) PersonIdentificationCodeSequence dvSQ
   # VR values: ["SQ"]
@@ -10898,11 +10904,11 @@ defmodule Exdcm.Tag do
 
   # (0040,2006) PlacerOrderNumber/ImagingServiceRequest(Retired) dvSH
   # VR values: ["SH"]
-  def name("00402006"), do: :placer_order_number_imaging_service_request(_retired)
+  def name("00402006"), do: :placer_order_number__imaging_service_request_retired
 
   # (0040,2007) FillerOrderNumber/ImagingServiceRequest(Retired) dvSH
   # VR values: ["SH"]
-  def name("00402007"), do: :filler_order_number_imaging_service_request(_retired)
+  def name("00402007"), do: :filler_order_number__imaging_service_request_retired
 
   # (0040,2008) OrderEnteredBy dvPN
   # VR values: ["PN"]
@@ -10918,11 +10924,11 @@ defmodule Exdcm.Tag do
 
   # (0040,2016) PlacerOrderNumber/ImagingServiceRequest dvLO
   # VR values: ["LO"]
-  def name("00402016"), do: :placer_order_number_imaging_service_request
+  def name("00402016"), do: :placer_order_number__imaging_service_request
 
   # (0040,2017) FillerOrderNumber/ImagingServiceRequest dvLO
   # VR values: ["LO"]
-  def name("00402017"), do: :filler_order_number_imaging_service_request
+  def name("00402017"), do: :filler_order_number__imaging_service_request
 
   # (0040,2400) ImagingServiceRequestComments dvLT
   # VR values: ["LT"]
@@ -10950,7 +10956,7 @@ defmodule Exdcm.Tag do
 
   # (0040,4005) ScheduledProcedureStepStartDate/Time dvDT
   # VR values: ["DT"]
-  def name("00404005"), do: :scheduled_procedure_step_start_date_time
+  def name("00404005"), do: :scheduled_procedure_step_start_date__time
 
   # (0040,4006) MultipleCopiesFlag dvCS
   # VR values: ["CS"]
@@ -10966,11 +10972,11 @@ defmodule Exdcm.Tag do
 
   # (0040,4010) ScheduledProcedureStepModificationDate/Time dvDT
   # VR values: ["DT"]
-  def name("00404010"), do: :scheduled_procedure_step_modification_date_time
+  def name("00404010"), do: :scheduled_procedure_step_modification_date__time
 
   # (0040,4011) ExpectedCompletionDate/Time dvDT
   # VR values: ["DT"]
-  def name("00404011"), do: :expected_completion_date_time
+  def name("00404011"), do: :expected_completion_date__time
 
   # (0040,4015) ResultingGeneralPurposePerformedProcedureStepsSequence dvSQ
   # VR values: ["SQ"]
@@ -11034,7 +11040,7 @@ defmodule Exdcm.Tag do
 
   # (0040,4032) Non_DICOMOutputCodeSequence dvSQ
   # VR values: ["SQ"]
-  def name("00404032"), do: :non__dicom_output_code_sequence
+  def name("00404032"), do: :non_dicom_output_code_sequence
 
   # (0040,4033) OutputInformationSequence dvSQ
   # VR values: ["SQ"]
@@ -11066,15 +11072,15 @@ defmodule Exdcm.Tag do
 
   # (0040,4050) PerformedProcedureStepStartDate/Time dvDT
   # VR values: ["DT"]
-  def name("00404050"), do: :performed_procedure_step_start_date_time
+  def name("00404050"), do: :performed_procedure_step_start_date__time
 
   # (0040,4051) PerformedProcedureStepEndDate/Time dvDT
   # VR values: ["DT"]
-  def name("00404051"), do: :performed_procedure_step_end_date_time
+  def name("00404051"), do: :performed_procedure_step_end_date__time
 
   # (0040,4052) ProcedureStepCancellationDate/Time dvDT
   # VR values: ["DT"]
-  def name("00404052"), do: :procedure_step_cancellation_date_time
+  def name("00404052"), do: :procedure_step_cancellation_date__time
 
   # (0040,8302) EntranceDoseinmGy dvDS
   # VR values: ["DS"]
@@ -11118,7 +11124,7 @@ defmodule Exdcm.Tag do
 
   # (0040,A007) FindingsFlag(Trial) dvCS
   # VR values: ["CS"]
-  def name("0040A007"), do: :findings_flag(_trial)
+  def name("0040A007"), do: :findings_flag_trial
 
   # (0040,A010) RelationshipType dvCS
   # VR values: ["CS"]
@@ -11126,27 +11132,27 @@ defmodule Exdcm.Tag do
 
   # (0040,A020) FindingsSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A020"), do: :findings_sequence(_trial)
+  def name("0040A020"), do: :findings_sequence_trial
 
   # (0040,A021) FindingsGroupUID(Trial) dvUI
   # VR values: ["UI"]
-  def name("0040A021"), do: :findings_group_ui_d(_trial)
+  def name("0040A021"), do: :findings_group_uid_trial
 
   # (0040,A022) ReferencedFindingsGroupUID(Trial) dvUI
   # VR values: ["UI"]
-  def name("0040A022"), do: :referenced_findings_group_ui_d(_trial)
+  def name("0040A022"), do: :referenced_findings_group_uid_trial
 
   # (0040,A023) FindingsGroupRecordingDate(Trial) dvDA
   # VR values: ["DA"]
-  def name("0040A023"), do: :findings_group_recording_date(_trial)
+  def name("0040A023"), do: :findings_group_recording_date_trial
 
   # (0040,A024) FindingsGroupRecordingTime(Trial) dvTM
   # VR values: ["TM"]
-  def name("0040A024"), do: :findings_group_recording_time(_trial)
+  def name("0040A024"), do: :findings_group_recording_time_trial
 
   # (0040,A026) FindingsSourceCategoryCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A026"), do: :findings_source_category_code_sequence(_trial)
+  def name("0040A026"), do: :findings_source_category_code_sequence_trial
 
   # (0040,A027) VerifyingOrganization dvLO
   # VR values: ["LO"]
@@ -11154,15 +11160,15 @@ defmodule Exdcm.Tag do
 
   # (0040,A028) DocumentingOrganizationIdentifierCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A028"), do: :documenting_organization_identifier_code_sequence(_trial)
+  def name("0040A028"), do: :documenting_organization_identifier_code_sequence_trial
 
   # (0040,A030) VerificationDate/Time dvDT
   # VR values: ["DT"]
-  def name("0040A030"), do: :verification_date_time
+  def name("0040A030"), do: :verification_date__time
 
   # (0040,A032) ObservationDate/Time dvDT
   # VR values: ["DT"]
-  def name("0040A032"), do: :observation_date_time
+  def name("0040A032"), do: :observation_date__time
 
   # (0040,A040) ValueType dvCS
   # VR values: ["CS"]
@@ -11174,7 +11180,7 @@ defmodule Exdcm.Tag do
 
   # (0040,A047) MeasurementPrecisionDescription(Trial) dvLO
   # VR values: ["LO"]
-  def name("0040A047"), do: :measurement_precision_description(_trial)
+  def name("0040A047"), do: :measurement_precision_description_trial
 
   # (0040,A050) ContinuityofContent dvCS
   # VR values: ["CS"]
@@ -11182,27 +11188,27 @@ defmodule Exdcm.Tag do
 
   # (0040,A057) UrgencyorPriorityAlerts(Trial) dvCS
   # VR values: ["CS"]
-  def name("0040A057"), do: :urgencyor_priority_alerts(_trial)
+  def name("0040A057"), do: :urgencyor_priority_alerts_trial
 
   # (0040,A060) SequencingIndicator(Trial) dvLO
   # VR values: ["LO"]
-  def name("0040A060"), do: :sequencing_indicator(_trial)
+  def name("0040A060"), do: :sequencing_indicator_trial
 
   # (0040,A066) DocumentIdentifierCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A066"), do: :document_identifier_code_sequence(_trial)
+  def name("0040A066"), do: :document_identifier_code_sequence_trial
 
   # (0040,A067) DocumentAuthor(Trial) dvPN
   # VR values: ["PN"]
-  def name("0040A067"), do: :document_author(_trial)
+  def name("0040A067"), do: :document_author_trial
 
   # (0040,A068) DocumentAuthorIdentifierCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A068"), do: :document_author_identifier_code_sequence(_trial)
+  def name("0040A068"), do: :document_author_identifier_code_sequence_trial
 
   # (0040,A070) IdentifierCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A070"), do: :identifier_code_sequence(_trial)
+  def name("0040A070"), do: :identifier_code_sequence_trial
 
   # (0040,A073) VerifyingObserverSequence dvSQ
   # VR values: ["SQ"]
@@ -11210,7 +11216,7 @@ defmodule Exdcm.Tag do
 
   # (0040,A074) ObjectBinaryIdentifier(Trial) dvOB
   # VR values: ["OB"]
-  def name("0040A074"), do: :object_binary_identifier(_trial)
+  def name("0040A074"), do: :object_binary_identifier_trial
 
   # (0040,A075) VerifyingObserverName dvPN
   # VR values: ["PN"]
@@ -11218,7 +11224,7 @@ defmodule Exdcm.Tag do
 
   # (0040,A076) DocumentingObserverIdentifierCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A076"), do: :documenting_observer_identifier_code_sequence(_trial)
+  def name("0040A076"), do: :documenting_observer_identifier_code_sequence_trial
 
   # (0040,A078) AuthorObserverSequence dvSQ
   # VR values: ["SQ"]
@@ -11238,7 +11244,7 @@ defmodule Exdcm.Tag do
 
   # (0040,A082) ParticipationDate/Time dvDT
   # VR values: ["DT"]
-  def name("0040A082"), do: :participation_date_time
+  def name("0040A082"), do: :participation_date__time
 
   # (0040,A084) ObserverType dvCS
   # VR values: ["CS"]
@@ -11246,7 +11252,7 @@ defmodule Exdcm.Tag do
 
   # (0040,A085) ProcedureIdentifierCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A085"), do: :procedure_identifier_code_sequence(_trial)
+  def name("0040A085"), do: :procedure_identifier_code_sequence_trial
 
   # (0040,A088) VerifyingObserverIdentificationCodeSequence dvSQ
   # VR values: ["SQ"]
@@ -11254,7 +11260,7 @@ defmodule Exdcm.Tag do
 
   # (0040,A089) ObjectDirectoryBinaryIdentifier(Trial) dvOB
   # VR values: ["OB"]
-  def name("0040A089"), do: :object_directory_binary_identifier(_trial)
+  def name("0040A089"), do: :object_directory_binary_identifier_trial
 
   # (0040,A090) EquivalentCDADocumentSequence dvSQ
   # VR values: ["SQ"]
@@ -11270,15 +11276,15 @@ defmodule Exdcm.Tag do
 
   # (0040,A110) DateofDocumentorVerbalTransaction(Trial) dvDA
   # VR values: ["DA"]
-  def name("0040A110"), do: :dateof_documentor_verbal_transaction(_trial)
+  def name("0040A110"), do: :dateof_documentor_verbal_transaction_trial
 
   # (0040,A112) TimeofDocumentCreationorVerbalTransaction(Trial) dvTM
   # VR values: ["TM"]
-  def name("0040A112"), do: :timeof_document_creationor_verbal_transaction(_trial)
+  def name("0040A112"), do: :timeof_document_creationor_verbal_transaction_trial
 
   # (0040,A120) Date/Time dvDT
   # VR values: ["DT"]
-  def name("0040A120"), do: :date_time
+  def name("0040A120"), do: :date__time
 
   # (0040,A121) Date dvDA
   # VR values: ["DA"]
@@ -11298,7 +11304,7 @@ defmodule Exdcm.Tag do
 
   # (0040,A125) ReportStatusID(Trial) dvCS
   # VR values: ["CS"]
-  def name("0040A125"), do: :report_status_i_d(_trial)
+  def name("0040A125"), do: :report_status_id_trial
 
   # (0040,A130) TemporalRangeType dvCS
   # VR values: ["CS"]
@@ -11318,7 +11324,7 @@ defmodule Exdcm.Tag do
 
   # (0040,A13A) ReferencedDate/Time dvDT
   # VR values: ["DT"]
-  def name("0040A13A"), do: :referenced_date_time
+  def name("0040A13A"), do: :referenced_date__time
 
   # (0040,A160) TextValue dvUT
   # VR values: ["UT"]
@@ -11338,7 +11344,7 @@ defmodule Exdcm.Tag do
 
   # (0040,A167) ObservationCategoryCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A167"), do: :observation_category_code_sequence(_trial)
+  def name("0040A167"), do: :observation_category_code_sequence_trial
 
   # (0040,A168) ConceptCodeSequence dvSQ
   # VR values: ["SQ"]
@@ -11346,7 +11352,7 @@ defmodule Exdcm.Tag do
 
   # (0040,A16A) BibliographicCitation(Trial) dvST
   # VR values: ["ST"]
-  def name("0040A16A"), do: :bibliographic_citation(_trial)
+  def name("0040A16A"), do: :bibliographic_citation_trial
 
   # (0040,A170) PurposeofReferenceCodeSequence dvSQ
   # VR values: ["SQ"]
@@ -11358,15 +11364,15 @@ defmodule Exdcm.Tag do
 
   # (0040,A172) ReferencedObservationUID(Trial) dvUI
   # VR values: ["UI"]
-  def name("0040A172"), do: :referenced_observation_ui_d(_trial)
+  def name("0040A172"), do: :referenced_observation_uid_trial
 
   # (0040,A173) ReferencedObservationClass(Trial) dvCS
   # VR values: ["CS"]
-  def name("0040A173"), do: :referenced_observation_class(_trial)
+  def name("0040A173"), do: :referenced_observation_class_trial
 
   # (0040,A174) ReferencedObjectObservationClass(Trial) dvCS
   # VR values: ["CS"]
-  def name("0040A174"), do: :referenced_object_observation_class(_trial)
+  def name("0040A174"), do: :referenced_object_observation_class_trial
 
   # (0040,A180) AnnotationGroupNumber dvUS
   # VR values: ["US"]
@@ -11374,15 +11380,15 @@ defmodule Exdcm.Tag do
 
   # (0040,A192) ObservationDate(Trial) dvDA
   # VR values: ["DA"]
-  def name("0040A192"), do: :observation_date(_trial)
+  def name("0040A192"), do: :observation_date_trial
 
   # (0040,A193) ObservationTime(Trial) dvTM
   # VR values: ["TM"]
-  def name("0040A193"), do: :observation_time(_trial)
+  def name("0040A193"), do: :observation_time_trial
 
   # (0040,A194) MeasurementAutomation(Trial) dvCS
   # VR values: ["CS"]
-  def name("0040A194"), do: :measurement_automation(_trial)
+  def name("0040A194"), do: :measurement_automation_trial
 
   # (0040,A195) ModifierCodeSequence dvSQ
   # VR values: ["SQ"]
@@ -11390,23 +11396,23 @@ defmodule Exdcm.Tag do
 
   # (0040,A224) IdentificationDescription(Trial) dvST
   # VR values: ["ST"]
-  def name("0040A224"), do: :identification_description(_trial)
+  def name("0040A224"), do: :identification_description_trial
 
   # (0040,A290) CoordinatesSetGeometricType(Trial) dvCS
   # VR values: ["CS"]
-  def name("0040A290"), do: :coordinates_set_geometric_type(_trial)
+  def name("0040A290"), do: :coordinates_set_geometric_type_trial
 
   # (0040,A296) AlgorithmCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A296"), do: :algorithm_code_sequence(_trial)
+  def name("0040A296"), do: :algorithm_code_sequence_trial
 
   # (0040,A297) AlgorithmDescription(Trial) dvST
   # VR values: ["ST"]
-  def name("0040A297"), do: :algorithm_description(_trial)
+  def name("0040A297"), do: :algorithm_description_trial
 
   # (0040,A29A) PixelCoordinatesSet(Trial) dvSL
   # VR values: ["SL"]
-  def name("0040A29A"), do: :pixel_coordinates_set(_trial)
+  def name("0040A29A"), do: :pixel_coordinates_set_trial
 
   # (0040,A300) MeasuredValueSequence dvSQ
   # VR values: ["SQ"]
@@ -11418,7 +11424,7 @@ defmodule Exdcm.Tag do
 
   # (0040,A307) CurrentObserver(Trial) dvPN
   # VR values: ["PN"]
-  def name("0040A307"), do: :current_observer(_trial)
+  def name("0040A307"), do: :current_observer_trial
 
   # (0040,A30A) NumericValue dvDS
   # VR values: ["DS"]
@@ -11426,31 +11432,31 @@ defmodule Exdcm.Tag do
 
   # (0040,A313) ReferencedAccessionSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A313"), do: :referenced_accession_sequence(_trial)
+  def name("0040A313"), do: :referenced_accession_sequence_trial
 
   # (0040,A33A) ReportStatusComment(Trial) dvST
   # VR values: ["ST"]
-  def name("0040A33A"), do: :report_status_comment(_trial)
+  def name("0040A33A"), do: :report_status_comment_trial
 
   # (0040,A340) ProcedureContextSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A340"), do: :procedure_context_sequence(_trial)
+  def name("0040A340"), do: :procedure_context_sequence_trial
 
   # (0040,A352) VerbalSource(Trial) dvPN
   # VR values: ["PN"]
-  def name("0040A352"), do: :verbal_source(_trial)
+  def name("0040A352"), do: :verbal_source_trial
 
   # (0040,A353) Address(Trial) dvST
   # VR values: ["ST"]
-  def name("0040A353"), do: :address(_trial)
+  def name("0040A353"), do: :address_trial
 
   # (0040,A354) TelephoneNumber(Trial) dvLO
   # VR values: ["LO"]
-  def name("0040A354"), do: :telephone_number(_trial)
+  def name("0040A354"), do: :telephone_number_trial
 
   # (0040,A358) VerbalSourceIdentifierCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A358"), do: :verbal_source_identifier_code_sequence(_trial)
+  def name("0040A358"), do: :verbal_source_identifier_code_sequence_trial
 
   # (0040,A360) PredecessorDocumentsSequence dvSQ
   # VR values: ["SQ"]
@@ -11470,7 +11476,7 @@ defmodule Exdcm.Tag do
 
   # (0040,A380) ReportDetailSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A380"), do: :report_detail_sequence(_trial)
+  def name("0040A380"), do: :report_detail_sequence_trial
 
   # (0040,A385) PertinentOtherEvidenceSequence dvSQ
   # VR values: ["SQ"]
@@ -11482,15 +11488,15 @@ defmodule Exdcm.Tag do
 
   # (0040,A402) ObservationSubjectUID(Trial) dvUI
   # VR values: ["UI"]
-  def name("0040A402"), do: :observation_subject_ui_d(_trial)
+  def name("0040A402"), do: :observation_subject_uid_trial
 
   # (0040,A403) ObservationSubjectClass(Trial) dvCS
   # VR values: ["CS"]
-  def name("0040A403"), do: :observation_subject_class(_trial)
+  def name("0040A403"), do: :observation_subject_class_trial
 
   # (0040,A404) ObservationSubjectTypeCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A404"), do: :observation_subject_type_code_sequence(_trial)
+  def name("0040A404"), do: :observation_subject_type_code_sequence_trial
 
   # (0040,A491) CompletionFlag dvCS
   # VR values: ["CS"]
@@ -11522,15 +11528,15 @@ defmodule Exdcm.Tag do
 
   # (0040,A600) ObservationSubjectContextFlag(Trial) dvCS
   # VR values: ["CS"]
-  def name("0040A600"), do: :observation_subject_context_flag(_trial)
+  def name("0040A600"), do: :observation_subject_context_flag_trial
 
   # (0040,A601) ObserverContextFlag(Trial) dvCS
   # VR values: ["CS"]
-  def name("0040A601"), do: :observer_context_flag(_trial)
+  def name("0040A601"), do: :observer_context_flag_trial
 
   # (0040,A603) ProcedureContextFlag(Trial) dvCS
   # VR values: ["CS"]
-  def name("0040A603"), do: :procedure_context_flag(_trial)
+  def name("0040A603"), do: :procedure_context_flag_trial
 
   # (0040,A730) ContentSequence dvSQ
   # VR values: ["SQ"]
@@ -11538,19 +11544,19 @@ defmodule Exdcm.Tag do
 
   # (0040,A731) RelationshipSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A731"), do: :relationship_sequence(_trial)
+  def name("0040A731"), do: :relationship_sequence_trial
 
   # (0040,A732) RelationshipTypeCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A732"), do: :relationship_type_code_sequence(_trial)
+  def name("0040A732"), do: :relationship_type_code_sequence_trial
 
   # (0040,A744) LanguageCodeSequence(Trial) dvSQ
   # VR values: ["SQ"]
-  def name("0040A744"), do: :language_code_sequence(_trial)
+  def name("0040A744"), do: :language_code_sequence_trial
 
   # (0040,A992) UniformResourceLocator(Trial) dvST
   # VR values: ["ST"]
-  def name("0040A992"), do: :uniform_resource_locator(_trial)
+  def name("0040A992"), do: :uniform_resource_locator_trial
 
   # (0040,B020) WaveformAnnotationSequence dvSQ
   # VR values: ["SQ"]
@@ -12074,7 +12080,7 @@ defmodule Exdcm.Tag do
 
   # (0044,0004) ApprovalStatusDate/Time dvDT
   # VR values: ["DT"]
-  def name("00440004"), do: :approval_status_date_time
+  def name("00440004"), do: :approval_status_date__time
 
   # (0044,0007) ProductTypeCodeSequence dvSQ
   # VR values: ["SQ"]
@@ -12094,11 +12100,11 @@ defmodule Exdcm.Tag do
 
   # (0044,000B) ProductExpirationDate/Time dvDT
   # VR values: ["DT"]
-  def name("0044000B"), do: :product_expiration_date_time
+  def name("0044000B"), do: :product_expiration_date__time
 
   # (0044,0010) SubstanceAdministrationDate/Time dvDT
   # VR values: ["DT"]
-  def name("00440010"), do: :substance_administration_date_time
+  def name("00440010"), do: :substance_administration_date__time
 
   # (0044,0011) SubstanceAdministrationNotes dvLO
   # VR values: ["LO"]
@@ -12462,11 +12468,11 @@ defmodule Exdcm.Tag do
 
   # (0046,0203) PupilCentroidX_Coordinate dvFL
   # VR values: ["FL"]
-  def name("00460203"), do: :pupil_centroid_x__coordinate
+  def name("00460203"), do: :pupil_centroidx_coordinate
 
   # (0046,0204) PupilCentroidY_Coordinate dvFL
   # VR values: ["FL"]
-  def name("00460204"), do: :pupil_centroid_y__coordinate
+  def name("00460204"), do: :pupil_centroidy_coordinate
 
   # (0046,0205) EquivalentPupilRadius dvFL
   # VR values: ["FL"]
@@ -12510,7 +12516,7 @@ defmodule Exdcm.Tag do
 
   # (0046,0224) CornealI_SValue dvFL
   # VR values: ["FL"]
-  def name("00460224"), do: :corneal_i__s_value
+  def name("00460224"), do: :corneali_s_value
 
   # (0046,0227) AnalyzedArea dvFL
   # VR values: ["FL"]
@@ -12834,7 +12840,7 @@ defmodule Exdcm.Tag do
 
   # (0048,0102) ImageOrientation(Slide) dvDS
   # VR values: ["DS"]
-  def name("00480102"), do: :image_orientation(_slide)
+  def name("00480102"), do: :image_orientation_slide
 
   # (0048,0105) OpticalPathSequence dvSQ
   # VR values: ["SQ"]
@@ -12890,7 +12896,7 @@ defmodule Exdcm.Tag do
 
   # (0048,021A) PlanePosition(Slide)Sequence dvSQ
   # VR values: ["SQ"]
-  def name("0048021A"), do: :plane_position(_slide)_sequence
+  def name("0048021A"), do: :plane_position_slide_sequence
 
   # (0048,021E) ColumnPositioninTotalImagePixelMatrix dvSL
   # VR values: ["SL"]
@@ -12906,7 +12912,7 @@ defmodule Exdcm.Tag do
 
   # (0050,0000) X_RayAngioDeviceGroupLength dvUL
   # VR values: ["UL"]
-  def name("00500000"), do: :x__ray_angio_device_group_length
+  def name("00500000"), do: :x_ray_angio_device_group_length
 
   # (0050,0004) CalibrationImage dvCS
   # VR values: ["CS"]
@@ -12946,7 +12952,7 @@ defmodule Exdcm.Tag do
 
   # (0050,0019) Inter_MarkerDistance dvDS
   # VR values: ["DS"]
-  def name("00500019"), do: :inter__marker_distance
+  def name("00500019"), do: :inter_marker_distance
 
   # (0050,001A) ContainerComponentMaterial dvCS
   # VR values: ["CS"]
@@ -12982,7 +12988,7 @@ defmodule Exdcm.Tag do
 
   # (0052,0001) Contrast/BolusIngredientPercentbyVolume dvFL
   # VR values: ["FL"]
-  def name("00520001"), do: :contrast_bolus_ingredient_percentby_volume
+  def name("00520001"), do: :contrast__bolus_ingredient_percentby_volume
 
   # (0052,0002) OCTFocalDistance dvFD
   # VR values: ["FD"]
@@ -13066,7 +13072,7 @@ defmodule Exdcm.Tag do
 
   # (0052,0034) FirstA_lineLocation dvFD
   # VR values: ["FD"]
-  def name("00520034"), do: :first_a_line_location
+  def name("00520034"), do: :firsta_line_location
 
   # (0052,0036) SeamLineIndex dvUS
   # VR values: ["US"]
@@ -13074,7 +13080,7 @@ defmodule Exdcm.Tag do
 
   # (0052,0038) NumberofPaddedA_lines dvUS
   # VR values: ["US"]
-  def name("00520038"), do: :numberof_padded_a_lines
+  def name("00520038"), do: :numberof_paddeda_lines
 
   # (0052,0039) InterpolationType dvCS
   # VR values: ["CS"]
@@ -13182,11 +13188,11 @@ defmodule Exdcm.Tag do
 
   # (0054,0060) R_RIntervalVector dvUS
   # VR values: ["US"]
-  def name("00540060"), do: :r__r_interval_vector
+  def name("00540060"), do: :r_r_interval_vector
 
   # (0054,0061) NumberofR_RIntervals dvUS
   # VR values: ["US"]
-  def name("00540061"), do: :numberof_r__r_intervals
+  def name("00540061"), do: :numberofr_r_intervals
 
   # (0054,0062) GatedInformationSequence dvSQ
   # VR values: ["SQ"]
@@ -13374,7 +13380,7 @@ defmodule Exdcm.Tag do
 
   # (0054,1310) Primary(Prompts)CountsAccumulated dvIS
   # VR values: ["IS"]
-  def name("00541310"), do: :primary(_prompts)_counts_accumulated
+  def name("00541310"), do: :primary_prompts_counts_accumulated
 
   # (0054,1311) SecondaryCountsAccumulated dvIS
   # VR values: ["IS"]
@@ -13782,7 +13788,7 @@ defmodule Exdcm.Tag do
 
   # (0068,6226) EffectiveDate/Time dvDT
   # VR values: ["DT"]
-  def name("00686226"), do: :effective_date_time
+  def name("00686226"), do: :effective_date__time
 
   # (0068,6230) ImplantTargetAnatomySequence dvSQ
   # VR values: ["SQ"]
@@ -13798,7 +13804,7 @@ defmodule Exdcm.Tag do
 
   # (0068,6270) InformationIssueDate/Time dvDT
   # VR values: ["DT"]
-  def name("00686270"), do: :information_issue_date_time
+  def name("00686270"), do: :information_issue_date__time
 
   # (0068,6280) InformationSummary dvST
   # VR values: ["ST"]
@@ -13934,7 +13940,7 @@ defmodule Exdcm.Tag do
 
   # (0068,6430) 2DMatingFeatureCoordinatesSequence dvSQ
   # VR values: ["SQ"]
-  def name("00686430"), do: :2_d_mating_feature_coordinates_sequence
+  def name("00686430"), do: :__d_mating_feature_coordinates_sequence
 
   # (0068,6440) ReferencedHPGLDocumentID dvUS
   # VR values: ["US"]
@@ -13942,19 +13948,19 @@ defmodule Exdcm.Tag do
 
   # (0068,6450) 2DMatingPoint dvFD
   # VR values: ["FD"]
-  def name("00686450"), do: :2_d_mating_point
+  def name("00686450"), do: :__d_mating_point
 
   # (0068,6460) 2DMatingAxes dvFD
   # VR values: ["FD"]
-  def name("00686460"), do: :2_d_mating_axes
+  def name("00686460"), do: :__d_mating_axes
 
   # (0068,6470) 2DDegreeofFreedomSequence dvSQ
   # VR values: ["SQ"]
-  def name("00686470"), do: :2_d_degreeof_freedom_sequence
+  def name("00686470"), do: :__d_degreeof_freedom_sequence
 
   # (0068,6490) 3DDegreeofFreedomAxis dvFD
   # VR values: ["FD"]
-  def name("00686490"), do: :3_d_degreeof_freedom_axis
+  def name("00686490"), do: :__d_degreeof_freedom_axis
 
   # (0068,64A0) RangeofFreedom dvFD
   # VR values: ["FD"]
@@ -13962,15 +13968,15 @@ defmodule Exdcm.Tag do
 
   # (0068,64C0) 3DMatingPoint dvFD
   # VR values: ["FD"]
-  def name("006864C0"), do: :3_d_mating_point
+  def name("006864C0"), do: :__d_mating_point
 
   # (0068,64D0) 3DMatingAxes dvFD
   # VR values: ["FD"]
-  def name("006864D0"), do: :3_d_mating_axes
+  def name("006864D0"), do: :__d_mating_axes
 
   # (0068,64F0) 2DDegreeofFreedomAxis dvFD
   # VR values: ["FD"]
-  def name("006864F0"), do: :2_d_degreeof_freedom_axis
+  def name("006864F0"), do: :__d_degreeof_freedom_axis
 
   # (0068,6500) PlanningLandmarkPointSequence dvSQ
   # VR values: ["SQ"]
@@ -13998,43 +14004,43 @@ defmodule Exdcm.Tag do
 
   # (0068,6550) 2DPointCoordinatesSequence dvSQ
   # VR values: ["SQ"]
-  def name("00686550"), do: :2_d_point_coordinates_sequence
+  def name("00686550"), do: :__d_point_coordinates_sequence
 
   # (0068,6560) 2DPointCoordinates dvFD
   # VR values: ["FD"]
-  def name("00686560"), do: :2_d_point_coordinates
+  def name("00686560"), do: :__d_point_coordinates
 
   # (0068,6590) 3DPointCoordinates dvFD
   # VR values: ["FD"]
-  def name("00686590"), do: :3_d_point_coordinates
+  def name("00686590"), do: :__d_point_coordinates
 
   # (0068,65A0) 2DLineCoordinatesSequence dvSQ
   # VR values: ["SQ"]
-  def name("006865A0"), do: :2_d_line_coordinates_sequence
+  def name("006865A0"), do: :__d_line_coordinates_sequence
 
   # (0068,65B0) 2DLineCoordinates dvFD
   # VR values: ["FD"]
-  def name("006865B0"), do: :2_d_line_coordinates
+  def name("006865B0"), do: :__d_line_coordinates
 
   # (0068,65D0) 3DLineCoordinates dvFD
   # VR values: ["FD"]
-  def name("006865D0"), do: :3_d_line_coordinates
+  def name("006865D0"), do: :__d_line_coordinates
 
   # (0068,65E0) 2DPlaneCoordinatesSequence dvSQ
   # VR values: ["SQ"]
-  def name("006865E0"), do: :2_d_plane_coordinates_sequence
+  def name("006865E0"), do: :__d_plane_coordinates_sequence
 
   # (0068,65F0) 2DPlaneIntersection dvFD
   # VR values: ["FD"]
-  def name("006865F0"), do: :2_d_plane_intersection
+  def name("006865F0"), do: :__d_plane_intersection
 
   # (0068,6610) 3DPlaneOrigin dvFD
   # VR values: ["FD"]
-  def name("00686610"), do: :3_d_plane_origin
+  def name("00686610"), do: :__d_plane_origin
 
   # (0068,6620) 3DPlaneNormal dvFD
   # VR values: ["FD"]
-  def name("00686620"), do: :3_d_plane_normal
+  def name("00686620"), do: :__d_plane_normal
 
   # (0070,0000) PresentationStateGroupLength dvUL
   # VR values: ["UL"]
@@ -14114,7 +14120,7 @@ defmodule Exdcm.Tag do
 
   # (0070,0040) ImageRotation(Retired) dvIS
   # VR values: ["IS"]
-  def name("00700040"), do: :image_rotation(_retired)
+  def name("00700040"), do: :image_rotation_retired
 
   # (0070,0041) ImageHorizontalFlip dvCS
   # VR values: ["CS"]
@@ -14126,11 +14132,11 @@ defmodule Exdcm.Tag do
 
   # (0070,0050) DisplayedAreaTopLeftHandCorner(Trial) dvUS
   # VR values: ["US"]
-  def name("00700050"), do: :displayed_area_top_left_hand_corner(_trial)
+  def name("00700050"), do: :displayed_area_top_left_hand_corner_trial
 
   # (0070,0051) DisplayedAreaBottomRightHandCorner(Trial) dvUS
   # VR values: ["US"]
-  def name("00700051"), do: :displayed_area_bottom_right_hand_corner(_trial)
+  def name("00700051"), do: :displayed_area_bottom_right_hand_corner_trial
 
   # (0070,0052) DisplayedAreaTopLeftHandCorner dvSL
   # VR values: ["SL"]
@@ -14470,7 +14476,7 @@ defmodule Exdcm.Tag do
 
   # (0071,0013) 3DReconstructionData dvOB
   # VR values: ["OB"]
-  def name("00710013"), do: :3_d_reconstruction_data
+  def name("00710013"), do: :__d_reconstruction_data
 
   # (0072,0002) HangingProtocolName dvSH
   # VR values: ["SH"]
@@ -14490,7 +14496,7 @@ defmodule Exdcm.Tag do
 
   # (0072,000A) HangingProtocolCreationDate/Time dvDT
   # VR values: ["DT"]
-  def name("0072000A"), do: :hanging_protocol_creation_date_time
+  def name("0072000A"), do: :hanging_protocol_creation_date__time
 
   # (0072,000C) HangingProtocolDefinitionSequence dvSQ
   # VR values: ["SQ"]
@@ -14770,7 +14776,7 @@ defmodule Exdcm.Tag do
 
   # (0072,0330) CineRelativetoReal_Time dvFD
   # VR values: ["FD"]
-  def name("00720330"), do: :cine_relativeto_real__time
+  def name("00720330"), do: :cine_relativeto_real_time
 
   # (0072,0400) FilterOperationsSequence dvSQ
   # VR values: ["SQ"]
@@ -14842,7 +14848,7 @@ defmodule Exdcm.Tag do
 
   # (0072,0520) 3DRenderingType dvCS
   # VR values: ["CS"]
-  def name("00720520"), do: :3_d_rendering_type
+  def name("00720520"), do: :__d_rendering_type
 
   # (0072,0600) SortingOperationsSequence dvSQ
   # VR values: ["SQ"]
@@ -14866,11 +14872,11 @@ defmodule Exdcm.Tag do
 
   # (0072,0704) Pseudo_ColorType dvCS
   # VR values: ["CS"]
-  def name("00720704"), do: :pseudo__color_type
+  def name("00720704"), do: :pseudo_color_type
 
   # (0072,0705) Pseudo_ColorPaletteInstanceReferenceSequence dvSQ
   # VR values: ["SQ"]
-  def name("00720705"), do: :pseudo__color_palette_instance_reference_sequence
+  def name("00720705"), do: :pseudo_color_palette_instance_reference_sequence
 
   # (0072,0706) ShowGrayscaleInverted dvCS
   # VR values: ["CS"]
@@ -14950,7 +14956,7 @@ defmodule Exdcm.Tag do
 
   # (0074,1024) BeamOrderIndex(Trial) dvIS
   # VR values: ["IS"]
-  def name("00741024"), do: :beam_order_index(_trial)
+  def name("00741024"), do: :beam_order_index_trial
 
   # (0074,1025) AutosequenceFlag dvCS
   # VR values: ["CS"]
@@ -15002,11 +15008,11 @@ defmodule Exdcm.Tag do
 
   # (0074,1038) DoubleExposureMeterset(Trial) dvDS
   # VR values: ["DS"]
-  def name("00741038"), do: :double_exposure_meterset(_trial)
+  def name("00741038"), do: :double_exposure_meterset_trial
 
   # (0074,103A) DoubleExposureFieldDelta(Trial) dvDS
   # VR values: ["DS"]
-  def name("0074103A"), do: :double_exposure_field_delta(_trial)
+  def name("0074103A"), do: :double_exposure_field_delta_trial
 
   # (0074,1040) RelatedReferenceRTImageSequence dvSQ
   # VR values: ["SQ"]
@@ -15262,11 +15268,11 @@ defmodule Exdcm.Tag do
 
   # (0078,0050) 3DImplantTemplateGroupMemberMatchingPoint dvFD
   # VR values: ["FD"]
-  def name("00780050"), do: :3_d_implant_template_group_member_matching_point
+  def name("00780050"), do: :__d_implant_template_group_member_matching_point
 
   # (0078,0060) 3DImplantTemplateGroupMemberMatchingAxes dvFD
   # VR values: ["FD"]
-  def name("00780060"), do: :3_d_implant_template_group_member_matching_axes
+  def name("00780060"), do: :__d_implant_template_group_member_matching_axes
 
   # (0078,0070) ImplantTemplateGroupMemberMatching2DCoordinatesSequence dvSQ
   # VR values: ["SQ"]
@@ -15274,11 +15280,11 @@ defmodule Exdcm.Tag do
 
   # (0078,0090) 2DImplantTemplateGroupMemberMatchingPoint dvFD
   # VR values: ["FD"]
-  def name("00780090"), do: :2_d_implant_template_group_member_matching_point
+  def name("00780090"), do: :__d_implant_template_group_member_matching_point
 
   # (0078,00A0) 2DImplantTemplateGroupMemberMatchingAxes dvFD
   # VR values: ["FD"]
-  def name("007800A0"), do: :2_d_implant_template_group_member_matching_axes
+  def name("007800A0"), do: :__d_implant_template_group_member_matching_axes
 
   # (0078,00B0) ImplantTemplateGroupVariationDimensionSequence dvSQ
   # VR values: ["SQ"]
@@ -15450,7 +15456,7 @@ defmodule Exdcm.Tag do
 
   # (0100,0420) SOPAuthorizationDate/Time dvDT
   # VR values: ["DT"]
-  def name("01000420"), do: :sop_authorization_date_time
+  def name("01000420"), do: :sop_authorization_date__time
 
   # (0100,0424) SOPAuthorizationComment dvLT
   # VR values: ["LT"]
@@ -15494,7 +15500,7 @@ defmodule Exdcm.Tag do
 
   # (0400,0105) DigitalSignatureDate/Time dvDT
   # VR values: ["DT"]
-  def name("04000105"), do: :digital_signature_date_time
+  def name("04000105"), do: :digital_signature_date__time
 
   # (0400,0110) CertificateType dvCS
   # VR values: ["CS"]
@@ -15554,7 +15560,7 @@ defmodule Exdcm.Tag do
 
   # (0400,0562) AttributeModificationDate/Time dvDT
   # VR values: ["DT"]
-  def name("04000562"), do: :attribute_modification_date_time
+  def name("04000562"), do: :attribute_modification_date__time
 
   # (0400,0563) ModifyingSystem dvLO
   # VR values: ["LO"]
@@ -15878,7 +15884,7 @@ defmodule Exdcm.Tag do
 
   # (2020,0040) RequestedDecimate/CropBehavior dvCS
   # VR values: ["CS"]
-  def name("20200040"), do: :requested_decimate_crop_behavior
+  def name("20200040"), do: :requested_decimate__crop_behavior
 
   # (2020,0050) RequestedResolutionID dvCS
   # VR values: ["CS"]
@@ -15890,7 +15896,7 @@ defmodule Exdcm.Tag do
 
   # (2020,00A2) Decimate/CropResult dvCS
   # VR values: ["CS"]
-  def name("202000A2"), do: :decimate_crop_result
+  def name("202000A2"), do: :decimate__crop_result
 
   # (2020,0110) BasicGrayscaleImageSequence dvSQ
   # VR values: ["SQ"]
@@ -15970,7 +15976,7 @@ defmodule Exdcm.Tag do
 
   # (2040,0500) ReferencedImageBoxSequence(Retired) dvSQ
   # VR values: ["SQ"]
-  def name("20400500"), do: :referenced_image_box_sequence(_retired)
+  def name("20400500"), do: :referenced_image_box_sequence_retired
 
   # (2050,0000) PresentationLUTGroupLength dvUL
   # VR values: ["UL"]
@@ -16030,7 +16036,7 @@ defmodule Exdcm.Tag do
 
   # (2100,0500) ReferencedPrintJobSequence(PullStoredPrint) dvSQ
   # VR values: ["SQ"]
-  def name("21000500"), do: :referenced_print_job_sequence(_pull_stored_print)
+  def name("21000500"), do: :referenced_print_job_sequence_pull_stored_print
 
   # (2110,0000) PrinterGroupLength dvUL
   # VR values: ["UL"]
@@ -16138,7 +16144,7 @@ defmodule Exdcm.Tag do
 
   # (2200,0008) IncludeNon_DICOMObjects dvCS
   # VR values: ["CS"]
-  def name("22000008"), do: :include_non__dicom_objects
+  def name("22000008"), do: :include_non_dicom_objects
 
   # (2200,0009) IncludeDisplayApplication dvCS
   # VR values: ["CS"]
@@ -16198,11 +16204,11 @@ defmodule Exdcm.Tag do
 
   # (3002,000D) X_RayImageReceptorTranslation dvDS
   # VR values: ["DS"]
-  def name("3002000D"), do: :x__ray_image_receptor_translation
+  def name("3002000D"), do: :x_ray_image_receptor_translation
 
   # (3002,000E) X_RayImageReceptorAngle dvDS
   # VR values: ["DS"]
-  def name("3002000E"), do: :x__ray_image_receptor_angle
+  def name("3002000E"), do: :x_ray_image_receptor_angle
 
   # (3002,0010) RTImageOrientation dvDS
   # VR values: ["DS"]
@@ -17250,7 +17256,7 @@ defmodule Exdcm.Tag do
 
   # (300A,00B4) Source_AxisDistance dvDS
   # VR values: ["DS"]
-  def name("300A00B4"), do: :source__axis_distance
+  def name("300A00B4"), do: :source_axis_distance
 
   # (300A,00B6) BeamLimitingDeviceSequence dvSQ
   # VR values: ["SQ"]
@@ -17270,7 +17276,7 @@ defmodule Exdcm.Tag do
 
   # (300A,00BC) NumberofLeaf/JawPairs dvIS
   # VR values: ["IS"]
-  def name("300A00BC"), do: :numberof_leaf_jaw_pairs
+  def name("300A00BC"), do: :numberof_leaf__jaw_pairs
 
   # (300A,00BE) LeafPositionBoundaries dvDS
   # VR values: ["DS"]
@@ -17302,7 +17308,7 @@ defmodule Exdcm.Tag do
 
   # (300A,00C7) High_DoseTechniqueType dvCS
   # VR values: ["CS"]
-  def name("300A00C7"), do: :high__dose_technique_type
+  def name("300A00C7"), do: :high_dose_technique_type
 
   # (300A,00C8) ReferenceImageNumber dvIS
   # VR values: ["IS"]
@@ -17314,7 +17320,7 @@ defmodule Exdcm.Tag do
 
   # (300A,00CC) ImagingDevice_SpecificAcquisitionParameters dvLO
   # VR values: ["LO"]
-  def name("300A00CC"), do: :imaging_device__specific_acquisition_parameters
+  def name("300A00CC"), do: :imaging_device_specific_acquisition_parameters
 
   # (300A,00CE) TreatmentDeliveryType dvCS
   # VR values: ["CS"]
@@ -17350,7 +17356,7 @@ defmodule Exdcm.Tag do
 
   # (300A,00D7) TotalWedgeTrayWater_EquivalentThickness dvFL
   # VR values: ["FL"]
-  def name("300A00D7"), do: :total_wedge_tray_water__equivalent_thickness
+  def name("300A00D7"), do: :total_wedge_tray_water_equivalent_thickness
 
   # (300A,00D8) WedgeOrientation dvDS
   # VR values: ["DS"]
@@ -17450,7 +17456,7 @@ defmodule Exdcm.Tag do
 
   # (300A,00F3) TotalBlockTrayWater_EquivalentThickness dvFL
   # VR values: ["FL"]
-  def name("300A00F3"), do: :total_block_tray_water__equivalent_thickness
+  def name("300A00F3"), do: :total_block_tray_water_equivalent_thickness
 
   # (300A,00F4) BlockSequence dvSQ
   # VR values: ["SQ"]
@@ -17566,7 +17572,7 @@ defmodule Exdcm.Tag do
 
   # (300A,011C) Leaf/JawPositions dvDS
   # VR values: ["DS"]
-  def name("300A011C"), do: :leaf_jaw_positions
+  def name("300A011C"), do: :leaf__jaw_positions
 
   # (300A,011E) GantryAngle dvDS
   # VR values: ["DS"]
@@ -18046,7 +18052,7 @@ defmodule Exdcm.Tag do
 
   # (300A,02E3) TotalCompensatorTrayWater_EquivalentThickness dvFL
   # VR values: ["FL"]
-  def name("300A02E3"), do: :total_compensator_tray_water__equivalent_thickness
+  def name("300A02E3"), do: :total_compensator_tray_water_equivalent_thickness
 
   # (300A,02E4) IsocentertoCompensatorTrayDistance dvFL
   # VR values: ["FL"]
@@ -18094,7 +18100,7 @@ defmodule Exdcm.Tag do
 
   # (300A,030A) VirtualSource_AxisDistances dvFL
   # VR values: ["FL"]
-  def name("300A030A"), do: :virtual_source__axis_distances
+  def name("300A030A"), do: :virtual_source_axis_distances
 
   # (300A,030C) SnoutSequence dvSQ
   # VR values: ["SQ"]
@@ -18558,7 +18564,7 @@ defmodule Exdcm.Tag do
 
   # (4008,00FF) ReportProductionStatus(Trial) dvCS
   # VR values: ["CS"]
-  def name("400800FF"), do: :report_production_status(_trial)
+  def name("400800FF"), do: :report_production_status_trial
 
   # (4008,0100) InterpretationRecordedDate dvDA
   # VR values: ["DA"]
@@ -19306,35 +19312,35 @@ defmodule Exdcm.Tag do
 
   # (6000,1100) OverlayDescriptor_Gray dvUS
   # VR values: ["US"]
-  def name("60001100"), do: :overlay_descriptor__gray
+  def name("60001100"), do: :overlay_descriptor_gray
 
   # (6000,1101) OverlayDescriptor_Red dvUS
   # VR values: ["US"]
-  def name("60001101"), do: :overlay_descriptor__red
+  def name("60001101"), do: :overlay_descriptor_red
 
   # (6000,1102) OverlayDescriptor_Green dvUS
   # VR values: ["US"]
-  def name("60001102"), do: :overlay_descriptor__green
+  def name("60001102"), do: :overlay_descriptor_green
 
   # (6000,1103) OverlayDescriptor_Blue dvUS
   # VR values: ["US"]
-  def name("60001103"), do: :overlay_descriptor__blue
+  def name("60001103"), do: :overlay_descriptor_blue
 
   # (6000,1200) Overlays_Gray dvUS
   # VR values: ["US"]
-  def name("60001200"), do: :overlays__gray
+  def name("60001200"), do: :overlays_gray
 
   # (6000,1201) Overlays_Red dvUS
   # VR values: ["US"]
-  def name("60001201"), do: :overlays__red
+  def name("60001201"), do: :overlays_red
 
   # (6000,1202) Overlays_Green dvUS
   # VR values: ["US"]
-  def name("60001202"), do: :overlays__green
+  def name("60001202"), do: :overlays_green
 
   # (6000,1203) Overlays_Blue dvUS
   # VR values: ["US"]
-  def name("60001203"), do: :overlays__blue
+  def name("60001203"), do: :overlays_blue
 
   # (6000,1301) ROIArea dvIS
   # VR values: ["IS"]
