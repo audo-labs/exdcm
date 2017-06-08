@@ -16,10 +16,9 @@ defmodule Exdcm.RS.QIDO do
     :world
   end
 
-  def studies(_params) do
+  def studies() do
     HTTPoison.get!("http://localhost:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies").body
     |> Poison.decode!
-    |> Enum.at(0)
-    |> Map.new(fn {k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)
+    |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 end
