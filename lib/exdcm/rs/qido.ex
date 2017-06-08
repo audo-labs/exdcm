@@ -43,13 +43,13 @@ defmodule Exdcm.RS.QIDO do
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 
-  def studyInstances(studyInstanceUid, seriesInstanceUid) do
+  def study_instances(studyInstanceUid, seriesInstanceUid) do
     HTTPoison.get!("#{@base}/aets/#{@aet}/rs/studies/#{studyInstanceUid}/series/#{seriesInstanceUid}/instances").body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 
-  def studyInstances(studyInstanceUid) do
+  def study_instances(studyInstanceUid) do
     HTTPoison.get!("#{@base}/aets/#{@aet}/rs/studies/#{studyInstanceUid}/instances").body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
