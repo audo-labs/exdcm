@@ -36,4 +36,10 @@ defmodule Exdcm.RS.QIDO do
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
+
+  def series() do
+    HTTPoison.get!("#{@base}/aets/#{@aet}/rs/series").body
+    |> Poison.decode!
+    |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
+  end
 end
