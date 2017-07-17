@@ -1,22 +1,26 @@
 defmodule Exdcm.RS.WADO do
   def studies(studyInstanceUid) do
+    tmp_dir = "#{System.tmp_dir()}/#{studyInstanceUid}"
+    File.mkdir_p!(dir)
     headers = [{"accept", "multipart/related;type=application/dicom"}]
     resp = HTTPoison.get!("http://localhost:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies/#{studyInstanceUid}", headers)
-    dicom_stream(resp, extract_boundary(resp.headers))
-    resp
+    dicom_stream(resp.body, extract_boundary(resp.headers), tmp_dir)
   end
 
-  defp dicom_stream(body, boundary) do
+  defp dicom_stream(body, boundary, dir) do
     Regex.compile!("(\r\n)*--#{boundary}(\r\n|--)")
     |> Regex.split(body, trim: true)
     |> Stream.map(fn(raw) ->
       [h|t] = String.split(raw, "\r\n\r\n")
       data = hd(t)
       %{"name" => name} = Regex.named_captures(~r/(Content-ID: <)(?<name>[^@]*)/, h)
-      :ok = File.write("#{name}.dcm", data)
-      {name, data}
+      filename = "#{dir}/#{name}.dcm"
+
+
+      :ok = File.write(filename, data)
+      filename
     end)
-    |> Stream.run
+    |> Enum.to_list
   end
 
   @doc """
