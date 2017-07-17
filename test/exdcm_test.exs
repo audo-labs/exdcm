@@ -1,6 +1,8 @@
 defmodule Exdcm.RS.QIDOTest do
   use ExUnit.Case
   doctest Exdcm.RS.QIDO
+  doctest Exdcm.RS.WADO
+  doctest Exdcm.RS.STOW
 
   test "the truth" do
     assert 1 + 1 == 2
