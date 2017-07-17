@@ -10,8 +10,8 @@ defmodule Exdcm.RS.WADO do
   end
 
   defp dicom_stream(body, boundary) do
-    body
-    |> String.split("--#{boundary}\r\n", trim: true)
+    Regex.compile!("(\r\n)*--#{boundary}(\r\n|--)")
+    |> Regex.split(body, trim: true)
     |> Stream.map(fn(raw) ->
       [h|t] = String.split(raw, "\r\n\r\n")
       data = hd(t)
