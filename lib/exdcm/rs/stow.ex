@@ -1,6 +1,9 @@
 defmodule Exdcm.RS.STOW do
+
+  @base "http://localhost:8042/dicom-web"
+
   def studies(resp) do
     ct = List.keyfind(resp.headers, "Content-Type", 0) 
-    HTTPoison.post!("http://localhost:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies", resp.body, [ct], recv_timeout: :infinity)
+    HTTPoison.post!("#{@base}/studies", resp.body, [ct], recv_timeout: :infinity)
   end
 end

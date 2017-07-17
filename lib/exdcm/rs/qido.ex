@@ -1,55 +1,64 @@
 defmodule Exdcm.RS.QIDO do
 
-  @base "http://localhost:8080/dcm4chee-arc"
+  #@base "http://localhost:8080/dcm4chee-arc"
+  @base "http://localhost:8042/dicom-web"
   @aet "DCM4CHEE"
   @moduledoc """
   Documentation for Exdcm.QIDO.RS.
   """
 
   def studies() do
-    HTTPoison.get!("#{@base}/aets/#{@aet}/rs/studies").body
+    headers = [{"accept", "application/json"}]
+    HTTPoison.get!("#{@base}/studies", headers).body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 
   def studies(studyInstanceUid) do
-    HTTPoison.get!("#{@base}/aets/#{@aet}/rs/studies?StudyInstanceUID=#{studyInstanceUid}").body
+    headers = [{"accept", "application/json"}]
+    HTTPoison.get!("#{@base}/studies?StudyInstanceUID=#{studyInstanceUid}", headers).body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 
   def patients() do
-    HTTPoison.get!("#{@base}/aets/#{@aet}/rs/patients").body
+    headers = [{"accept", "application/json"}]
+    HTTPoison.get!("#{@base}/patients", headers).body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 
   def series(studyInstanceUid) do
-    HTTPoison.get!("#{@base}/aets/#{@aet}/rs/studies/#{studyInstanceUid}/series").body
+    headers = [{"accept", "application/json"}]
+    HTTPoison.get!("#{@base}/studies/#{studyInstanceUid}/series", headers).body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 
   def series() do
-    HTTPoison.get!("#{@base}/aets/#{@aet}/rs/series").body
+    headers = [{"accept", "application/json"}]
+    HTTPoison.get!("#{@base}/series", headers).body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 
   def study_instances(studyInstanceUid, seriesInstanceUid) do
-    HTTPoison.get!("#{@base}/aets/#{@aet}/rs/studies/#{studyInstanceUid}/series/#{seriesInstanceUid}/instances").body
+    headers = [{"accept", "application/json"}]
+    HTTPoison.get!("#{@base}/studies/#{studyInstanceUid}/series/#{seriesInstanceUid}/instances", headers).body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 
   def study_instances(studyInstanceUid) do
-    HTTPoison.get!("#{@base}/aets/#{@aet}/rs/studies/#{studyInstanceUid}/instances").body
+    headers = [{"accept", "application/json"}]
+    HTTPoison.get!("#{@base}/studies/#{studyInstanceUid}/instances", headers).body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 
   def instances() do
-    HTTPoison.get!("#{@base}/aets/#{@aet}/rs/instances").body
+    headers = [{"accept", "application/json"}]
+    HTTPoison.get!("#{@base}/instances", headers).body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
