@@ -2,7 +2,7 @@ defmodule Exdcm.RS.QIDO do
 
   #@base "http://localhost:8080/dcm4chee-arc"
   @base "http://localhost:8042/dicom-web"
-  @aet "DCM4CHEE"
+  #@aet "DCM4CHEE"
   @moduledoc """
   Documentation for Exdcm.QIDO.RS.
   """

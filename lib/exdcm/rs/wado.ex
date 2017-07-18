@@ -17,7 +17,7 @@ defmodule Exdcm.RS.WADO do
     |> Regex.split(body, trim: true)
     |> Stream.map(fn(raw) ->
       i = i + 1
-      [h|t] = String.split(raw, "\r\n\r\n")
+      [_h|t] = String.split(raw, "\r\n\r\n")
       data = hd(t)
       #%{"name" => name} = Regex.named_captures(~r/(Content-ID: <)(?<name>[^@]*)/, h)
       name = i
@@ -34,7 +34,6 @@ defmodule Exdcm.RS.WADO do
   """
   def extract_boundary(headers) do
     {_, type} = headers |> List.keyfind("Content-Type", 0)
-    IO.inspect(type)
     %{"boundary" => boundary} = Regex.named_captures(~r/boundary=(?<boundary>[a-z0-9-]*)/, type)
     boundary
   end

@@ -16,8 +16,11 @@ defmodule Exdcm.VR do
   # "http://localhost:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies/1.3.51.0.7.13820666844.51347.19530.47084.17562.12712.13942"
   def value(%{"Value" => [value], "vr" => "UR"}), do: value
 
-  #"MARIA DO CARMO DOS SANTOS"
+  #"MARIA DO CARMO DOS SANTOS" (DCM4CHEE)
   def value(%{"Value" => [%{"Alphabetic" => value}], "vr" => "PN"}), do: value
+  
+  #"MARIA DO CARMO DOS SANTOS" (ORTHANC)
+  def value(%{"Value" => [value], "vr" => "PN"}), do: value
   
   # "49187"
   def value(%{"Value" => [value], "vr" => "LO"}), do: value
@@ -29,6 +32,6 @@ defmodule Exdcm.VR do
 
   def value(%{"Value" => [value], "vr" => "IS"}), do: value
 
-  def value(%{"vr" => _}), do: nil
+  def value(%{"Value" => [value], "vr" => _}), do: value
 
 end
