@@ -1,6 +1,7 @@
 defmodule Exdcm.RS.QIDO do
 
   #@base "http://localhost:8080/dcm4chee-arc"
+  @options [timeout: 20000, recv_timeout: 20000]
   @base "http://localhost:8042/dicom-web"
   #@aet "DCM4CHEE"
   @moduledoc """
@@ -9,14 +10,15 @@ defmodule Exdcm.RS.QIDO do
 
   def studies() do
     headers = [{"accept", "application/json"}]
-    HTTPoison.get!("#{@base}/studies", headers).body
+    HTTPoison.get!("#{@base}/studies?includefield=StudyDescription", headers, @options).body
+    #HTTPoison.get!("#{@base}/studies", headers).body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 
   def studies(studyInstanceUid) do
     headers = [{"accept", "application/json"}]
-    HTTPoison.get!("#{@base}/studies?StudyInstanceUID=#{studyInstanceUid}", headers).body
+    HTTPoison.get!("#{@base}/studies?StudyInstanceUID=#{studyInstanceUid}&includefield=StudyDescription", headers, @options).body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
