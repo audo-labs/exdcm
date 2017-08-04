@@ -20,6 +20,9 @@ use Mix.Config
 #
 #     config :logger, level: :info
 #
+config :exdcm, Exdcm,
+  dicomweb: "http://localhost:8043/dicom-web"
+
 
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment

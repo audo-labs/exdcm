@@ -2,7 +2,7 @@ defmodule Exdcm.RS.QIDO do
 
   #@base "http://localhost:8080/dcm4chee-arc"
   @options [timeout: 20000, recv_timeout: 20000]
-  @base "http://localhost:8042/dicom-web"
+  @base Application.get_env(:exdcm, Exdcm) |> Keyword.get(:dicomweb)
   #@aet "DCM4CHEE"
   @moduledoc """
   Documentation for Exdcm.QIDO.RS.
