@@ -21,7 +21,7 @@ use Mix.Config
 #     config :logger, level: :info
 #
 config :exdcm, Exdcm,
-  dicomweb: "http://localhost:8043/dicom-web"
+  dicomweb: "http://localhost:8042/dicom-web"
 
 
 # It is also possible to import configuration files, relative to this
