@@ -10,17 +10,18 @@ defmodule Exdcm.RS.QIDO do
 
   def studies() do
     headers = [{"accept", "application/json"}]
-    HTTPoison.get!("#{@base}/studies?includefield=StudyDescription", headers, @options).body
+    HTTPoison.get!("#{@base}/studies?includefield=StudyDescription,PatientAge", headers, @options).body
     #HTTPoison.get!("#{@base}/studies", headers).body
     |> Poison.decode!
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 
-  def studies(studyInstanceUid) do
+  def study(studyInstanceUid) do
     headers = [{"accept", "application/json"}]
-    HTTPoison.get!("#{@base}/studies?StudyInstanceUID=#{studyInstanceUid}&includefield=StudyDescription", headers, @options).body
+    HTTPoison.get!("#{@base}/studies?StudyInstanceUID=#{studyInstanceUid}&includefield=StudyDescription,PatientAge", headers, @options).body
     |> Poison.decode!
-    |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
+    |> Enum.at(0)
+    |> Map.new(fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)
   end
 
   def patients() do
@@ -30,7 +31,7 @@ defmodule Exdcm.RS.QIDO do
     |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
   end
 
-  def series(studyInstanceUid) do
+  def study_series(studyInstanceUid) do
     headers = [{"accept", "application/json"}]
     HTTPoison.get!("#{@base}/studies/#{studyInstanceUid}/series", headers).body
     |> Poison.decode!
