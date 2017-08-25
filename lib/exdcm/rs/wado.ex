@@ -12,15 +12,14 @@ defmodule Exdcm.RS.WADO do
   end
 
   defp dicom_stream(body, boundary, dir) do
-    i = -1
     Regex.compile!("(\r\n)*--#{boundary}(\r\n|--(\r\n)*)")
     |> Regex.split(body, trim: true)
-    |> Stream.map(fn(raw) ->
-      i = i + 1
-      [_h|t] = String.split(raw, "\r\n\r\n")
+    |> Stream.with_index
+    |> Enum.map(fn({raw, name}) ->
+      [h|t] = String.split(raw, "\r\n\r\n")
       data = hd(t)
+      # This line below works with dcm4chee
       #%{"name" => name} = Regex.named_captures(~r/(Content-ID: <)(?<name>[^@]*)/, h)
-      name = i
       filename = "#{dir}/#{name}.dcm"
       :ok = File.write(filename, data)
       filename
