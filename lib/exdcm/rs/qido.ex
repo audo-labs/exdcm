@@ -1,68 +1,62 @@
 defmodule Exdcm.RS.QIDO do
 
-  #@base "http://localhost:8080/dcm4chee-arc"
-  @options [timeout: 20000, recv_timeout: 20000]
-  @base "http://localhost:8042/dicom-web"
-  #@aet "DCM4CHEE"
+  import Exdcm.Helpers
+
   @moduledoc """
   Documentation for Exdcm.QIDO.RS.
   """
 
-  def studies() do
-    headers = [{"accept", "application/json"}]
-    HTTPoison.get!("#{@base}/studies?includefield=StudyDescription,PatientAge", headers, @options).body
-    #HTTPoison.get!("#{@base}/studies", headers).body
-    |> Poison.decode!
-    |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
+  def search_for_studies(base_url, query \\ %{}, response_params \\ %{}) do
+    url = build_qido_url(base_url, "/studies", query, response_params)
+    request(url, true)
   end
 
-  def study(studyInstanceUid) do
-    headers = [{"accept", "application/json"}]
-    HTTPoison.get!("#{@base}/studies?StudyInstanceUID=#{studyInstanceUid}&includefield=StudyDescription,PatientAge", headers, @options).body
-    |> Poison.decode!
-    |> Enum.at(0)
-    |> Map.new(fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)
+  def search_for_series(base_url, query \\ %{}, response_params \\ %{}) do
+    url = build_qido_url(base_url, "/series", query, response_params)
+    request(url, true)
+  end
+  def search_for_series_by_study(base_url, study_instance_uid, query \\ %{}, response_params \\ %{}) do
+    url = build_qido_url(base_url, "/studies/#{study_instance_uid}/series", query, response_params)
+    request(url, true)
   end
 
-  def patients() do
-    headers = [{"accept", "application/json"}]
-    HTTPoison.get!("#{@base}/patients", headers).body
-    |> Poison.decode!
-    |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
+  def search_for_instances(base_url, query \\ %{}, response_params \\ %{}) do
+    url = build_qido_url(base_url, "/instances", query, response_params)
+    request(url, true)
+  end
+  def search_for_instances_by_study(base_url, study_instance_uid, query \\ %{}, response_params \\ %{}) do
+    url = build_qido_url(base_url, "/studies/#{study_instance_uid}/instances", query, response_params)
+    request(url, true)
+  end
+  def search_for_instances_by_series(base_url, study_instance_uid, series_instance_uid, query \\ %{}, response_params \\ %{}) do
+    url = build_qido_url(base_url, "/studies/#{study_instance_uid}/series/#{series_instance_uid}/instances", query, response_params)
+    request(url, true)
   end
 
-  def study_series(studyInstanceUid) do
-    headers = [{"accept", "application/json"}]
-    HTTPoison.get!("#{@base}/studies/#{studyInstanceUid}/series", headers).body
-    |> Poison.decode!
-    |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
+  defp build_qido_url(base_url, path, query, response_params) do
+    query = prepare_query(query, response_params)
+    build_url(base_url, path, query)
+  end
+  defp prepare_query(query, response_params) do
+    fields = response_params[:include_fields]
+    include_fields =
+      cond do
+        fields == :all ->
+          "all"
+        is_list(fields) && length(fields) > 0 ->
+          Enum.join(fields, ",")
+        true ->
+          nil
+      end
+    base = %{
+      "includefield" => include_fields,
+      "limit" => response_params[:limit],
+      "offset" => response_params[:limit]
+    }
+    base
+    |> Map.merge(query)
+    |> Enum.reject(fn {_, v} -> is_nil(v) end)
+    |> Map.new
   end
 
-  def series() do
-    headers = [{"accept", "application/json"}]
-    HTTPoison.get!("#{@base}/series", headers).body
-    |> Poison.decode!
-    |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
-  end
-
-  def study_instances(studyInstanceUid, seriesInstanceUid) do
-    headers = [{"accept", "application/json"}]
-    HTTPoison.get!("#{@base}/studies/#{studyInstanceUid}/series/#{seriesInstanceUid}/instances", headers).body
-    |> Poison.decode!
-    |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
-  end
-
-  def study_instances(studyInstanceUid) do
-    headers = [{"accept", "application/json"}]
-    HTTPoison.get!("#{@base}/studies/#{studyInstanceUid}/instances", headers).body
-    |> Poison.decode!
-    |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
-  end
-
-  def instances() do
-    headers = [{"accept", "application/json"}]
-    HTTPoison.get!("#{@base}/instances", headers).body
-    |> Poison.decode!
-    |> Enum.map(&(Map.new(&1, fn{k, v} -> {Exdcm.Tag.name(k), Exdcm.VR.value(v)} end)))
-  end
 end
