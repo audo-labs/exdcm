@@ -5,7 +5,6 @@ defmodule Exdcm.VR do
 
   # time"081614"
   def value(%{"Value" => [value], "vr" => "TM"}), do: value
-
     
   # "DCM4CHEE"
   def value(%{"Value" => [value], "vr" => "AE"}), do: value
