@@ -1,13 +1,12 @@
 defmodule Exdcm.RS.WADO do
 
-  @base "http://localhost:8042/dicom-web"
   @options [timeout: 10000, recv_timeout: 30000]  
 
-  def studies(studyInstanceUid) do
+  def studies(base_url, studyInstanceUid) do
     tmp_dir = "#{System.tmp_dir()}/#{studyInstanceUid}"
     File.mkdir_p!(tmp_dir)
     headers = [{"accept", "multipart/related;type=application/dicom"}]
-    resp = HTTPoison.get!("#{@base}/studies/#{studyInstanceUid}", headers, @options)
+    resp = HTTPoison.get!("#{base_url}/studies/#{studyInstanceUid}", headers, @options)
     dicom_stream(resp.body, extract_boundary(resp.headers), tmp_dir)
   end
 
