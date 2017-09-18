@@ -7,19 +7,17 @@ defmodule Exdcm.RS.WADO do
     File.mkdir_p!(tmp_dir)
     headers = [{"accept", "multipart/related;type=application/dicom"}]
     resp = HTTPoison.get!("#{base_url}/studies/#{studyInstanceUid}", headers, @options)
-    dicom_stream(resp.body, extract_boundary(resp.headers), tmp_dir)
+    boundary = resp.headers |> extract_boundary
+    {:ok, parts} = :hackney_multipart.decode_form(boundary, resp.body)
+    dicom_stream(parts, tmp_dir)
   end
 
-  defp dicom_stream(body, boundary, dir) do
-    Regex.compile!("(\r\n)*--#{boundary}(\r\n|--(\r\n)*)")
-    |> Regex.split(body, trim: true)
+  defp dicom_stream(parts, dir) do
+    parts
     |> Stream.with_index
-    |> Enum.map(fn({raw, name}) ->
-      [h|t] = String.split(raw, "\r\n\r\n")
-      data = hd(t)
-      # This line below works with dcm4chee
-      #%{"name" => name} = Regex.named_captures(~r/(Content-ID: <)(?<name>[^@]*)/, h)
-      filename = "#{dir}/#{name}.dcm"
+    |> Enum.map(fn({part, index}) ->
+      {_, data} = part
+      filename = "#{dir}/#{index}.dcm"
       :ok = File.write(filename, data)
       filename
     end)
