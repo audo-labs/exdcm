@@ -1,7 +1,11 @@
 defmodule Exdcm.Helpers do
 
   @default_headers [{"accept", "application/json"}]
-  @default_options [timeout: 10000, recv_timeout: 30000]
+  @default_hackney_opts [timeout: 10000, recv_timeout: 30000]
+
+  def build_hackney_opts(user_opts \\ %{}) do
+    @default_hackney_opts |> Keyword.merge(user_opts)
+  end
 
   def build_url(base_path, path, query \\ %{}) do
     base_url = base_path <> path
@@ -13,8 +17,8 @@ defmodule Exdcm.Helpers do
     end |> to_string
   end
 
-  def request(url, tagify_response \\ false) do
-    case HTTPoison.get(url, @default_headers, @default_options) do
+  def request(url, tagify_response \\ false, hackney_opts \\ %{}) do
+    case HTTPoison.get(url, @default_headers, build_hackney_opts(hackney_opts)) do
       {:ok, %{status_code: status_code, body: body}} ->
         case Poison.decode(body) do
           {:ok, response} when div(status_code, 100) == 2 ->

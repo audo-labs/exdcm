@@ -1,12 +1,12 @@
 defmodule Exdcm.RS.WADO do
 
-  @options [timeout: 10000, recv_timeout: 30000]  
+  import Exdcm.Helpers
 
-  def studies(base_url, studyInstanceUid) do
+  def studies(base_url, studyInstanceUid, hackney_opts \\ %{}) do
     tmp_dir = "#{System.tmp_dir()}/#{studyInstanceUid}"
     File.mkdir_p!(tmp_dir)
     headers = [{"accept", "multipart/related;type=application/dicom"}]
-    resp = HTTPoison.get!("#{base_url}/studies/#{studyInstanceUid}", headers, @options)
+    resp = HTTPoison.get!("#{base_url}/studies/#{studyInstanceUid}", headers, build_hackney_opts(hackney_opts))
     boundary = resp.headers |> extract_boundary
     {:ok, parts} = :hackney_multipart.decode_form(boundary, resp.body)
     dicom_stream(parts, tmp_dir)

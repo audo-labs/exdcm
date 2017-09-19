@@ -6,31 +6,31 @@ defmodule Exdcm.RS.QIDO do
   Documentation for Exdcm.QIDO.RS.
   """
 
-  def search_for_studies(base_url, query \\ %{}, response_params \\ %{}) do
+  def search_for_studies(base_url, query \\ %{}, response_params \\ %{}, hackney_opts \\ %{}) do
     url = build_qido_url(base_url, "/studies", query, response_params)
-    request(url, true)
+    request(url, true, hackney_opts)
   end
 
-  def search_for_series(base_url, query \\ %{}, response_params \\ %{}) do
+  def search_for_series(base_url, query \\ %{}, response_params \\ %{}, hackney_opts \\ %{}) do
     url = build_qido_url(base_url, "/series", query, response_params)
-    request(url, true)
+    request(url, true, hackney_opts)
   end
-  def search_for_series_by_study(base_url, study_instance_uid, query \\ %{}, response_params \\ %{}) do
+  def search_for_series_by_study(base_url, study_instance_uid, query \\ %{}, response_params \\ %{}, hackney_opts \\ %{}) do
     url = build_qido_url(base_url, "/studies/#{study_instance_uid}/series", query, response_params)
-    request(url, true)
+    request(url, true, hackney_opts)
   end
 
-  def search_for_instances(base_url, query \\ %{}, response_params \\ %{}) do
+  def search_for_instances(base_url, query \\ %{}, response_params \\ %{}, hackney_opts \\ %{}) do
     url = build_qido_url(base_url, "/instances", query, response_params)
-    request(url, true)
+    request(url, true, hackney_opts)
   end
-  def search_for_instances_by_study(base_url, study_instance_uid, query \\ %{}, response_params \\ %{}) do
+  def search_for_instances_by_study(base_url, study_instance_uid, query \\ %{}, response_params \\ %{}, hackney_opts \\ %{}) do
     url = build_qido_url(base_url, "/studies/#{study_instance_uid}/instances", query, response_params)
-    request(url, true)
+    request(url, true, hackney_opts)
   end
-  def search_for_instances_by_series(base_url, study_instance_uid, series_instance_uid, query \\ %{}, response_params \\ %{}) do
+  def search_for_instances_by_series(base_url, study_instance_uid, series_instance_uid, query \\ %{}, response_params \\ %{}, hackney_opts \\ %{}) do
     url = build_qido_url(base_url, "/studies/#{study_instance_uid}/series/#{series_instance_uid}/instances", query, response_params)
-    request(url, true)
+    request(url, true, hackney_opts)
   end
 
   defp build_qido_url(base_url, path, query, response_params) do
