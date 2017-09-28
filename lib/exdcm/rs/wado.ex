@@ -7,9 +7,12 @@ defmodule Exdcm.RS.WADO do
     File.mkdir_p!(tmp_dir)
     headers = [{"accept", "multipart/related;type=application/dicom"}]
     resp = HTTPoison.get!("#{base_url}/studies/#{studyInstanceUid}", headers, build_hackney_opts(hackney_opts))
-    boundary = resp.headers |> extract_boundary
-    {:ok, parts} = :hackney_multipart.decode_form(boundary, resp.body)
-    dicom_stream(parts, tmp_dir)
+    case resp.headers |> extract_boundary do
+      nil -> []
+      boundary ->
+        {:ok, parts} = :hackney_multipart.decode_form(boundary, resp.body)
+        dicom_stream(parts, tmp_dir)
+    end
   end
 
   defp dicom_stream(parts, dir) do
@@ -29,9 +32,12 @@ defmodule Exdcm.RS.WADO do
   "32e90712-0116-431d-8725-0da45172a3ea"
   """
   def extract_boundary(headers) do
-    {_, type} = headers |> List.keyfind("Content-Type", 0)
-    %{"boundary" => boundary} = Regex.named_captures(~r/boundary=(?<boundary>[a-z0-9-]*)/, type)
-    boundary
+    case headers |> List.keyfind("Content-Type", 0) do
+      nil -> nil
+      {_, type} ->
+        %{"boundary" => boundary} = Regex.named_captures(~r/boundary=(?<boundary>[a-z0-9-]*)/, type)
+        boundary
+    end
   end
 
 end
