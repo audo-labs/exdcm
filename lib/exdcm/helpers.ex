@@ -4,7 +4,7 @@ defmodule Exdcm.Helpers do
   @default_hackney_opts [timeout: 10000, recv_timeout: 30000]
 
   def build_hackney_opts(user_opts \\ %{}) do
-    @default_hackney_opts |> Keyword.merge(user_opts)
+    @default_hackney_opts |> Keyword.merge([hackney: user_opts])
   end
 
   def build_url(base_path, path, query \\ %{}) do
