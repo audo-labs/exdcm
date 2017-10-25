@@ -33,4 +33,7 @@ defmodule Exdcm.VR do
 
   def value(%{"Value" => [value], "vr" => _}), do: value
 
+  # TODO: treat %{"Value" => [], "vr" => "SQ"}
+  def value(%{"Value" => [], "vr" => _}), do: ""
+
 end
